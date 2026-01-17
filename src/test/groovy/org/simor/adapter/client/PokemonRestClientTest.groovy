@@ -1,4 +1,4 @@
-package org.simor.adapter.repository
+package org.simor.adapter.client
 
 import org.simor.entity.dto.FlavorLanguage
 import org.simor.entity.dto.FlavorTextEntry
@@ -50,20 +50,20 @@ class PokemonRestClientTest extends Specification {
 
     }
 
-    def "Given unexisting pokemon it throws HttpClientErrorException.NotFound"() {
+    def "Given unexisting pokemon it throws PokemonRestClientException with status 404"() {
         when:
         pokemonRestClient.getPokemonSpec("notExist")
         then:
-        def e = thrown HttpClientErrorException.NotFound
+        def e = thrown PokemonRestClientException
         e.getStatusCode() == HttpStatus.NOT_FOUND
-        e.getResponseBodyAsString() == "Not found"
+        e.getMessage() == "404 Not Found: \"Not found\""
     }
 
-    def "Given server error it throws HttpClientErrorException.InternalServerError"() {
+    def "Given server error it throws PokemonRestClientException with status 500"() {
         when:
         pokemonRestClient.getPokemonSpec("error")
         then:
-        def e = thrown HttpServerErrorException.InternalServerError
+        def e = thrown PokemonRestClientException
         e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR
     }
 
