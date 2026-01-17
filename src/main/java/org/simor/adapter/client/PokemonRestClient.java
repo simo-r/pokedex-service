@@ -17,8 +17,6 @@ public class PokemonRestClient {
     }
 
     public PokemonSpec getPokemonSpec(String pokemonName) {
-        // FIXME Check for spec presence
-        // FIXME Handle RestClientException like 404, 5xx
         try {
             return pokemonRestClient.get()
                     .uri(pokemonName)

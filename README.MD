@@ -35,11 +35,7 @@ TODO
 ## Third-party api
 
 ### Pokedex
-https://pokeapi.co/api/v2/pokemon-species/mewtwo
-
-[WIP]
-- Choose default language: EN
-- Choose default pokedex flavour: RED (?)
+https://pokeapi.co/api/v2/pokemon-species
 
 
 ## Usage
@@ -51,13 +47,13 @@ curl --request GET \
   --url http://localhost:8080/v1/pokemon/{pokemon-name}
 ```
 
-
 ## Production readiness
 
 ### Functional
 - Authentication & Authorization
 - Logging 
 - Data model validation: add optional/required fields, nullable
+- Improve exception handling: rest client exceptions, business logic exceptions
 
 ### Business
 - Multiple locale support
