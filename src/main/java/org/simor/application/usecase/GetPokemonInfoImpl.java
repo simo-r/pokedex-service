@@ -10,14 +10,14 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class PokemonInfoUseCaseImpl implements PokemonInfoUseCase {
+public class GetPokemonInfoImpl implements GetPokemonInfoUseCase {
 
     public static final String DEFAULT_LANGUAGE = "en";
     public static final String DEFAULT_FLAVOR = "red";
     private final PokemonRestClient pokemonRestClient;
 
     @Override
-    public PokemonInfoResponse getBasicPokemonInfo(String pokemonName) {
+    public PokemonInfoResponse execute(String pokemonName) {
         PokemonSpec spec = pokemonRestClient.getPokemonSpec(pokemonName);
         String description = spec.flavorTextEntries()
                 .stream()

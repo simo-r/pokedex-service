@@ -1,7 +1,7 @@
 package org.simor.application.usecase.impl
 
 import org.simor.adapter.client.PokemonRestClient
-import org.simor.application.usecase.PokemonInfoUseCaseImpl
+import org.simor.application.usecase.GetPokemonInfoImpl
 
 import org.simor.entity.FlavorLanguage
 import org.simor.entity.FlavorTextEntry
@@ -12,14 +12,14 @@ import org.simor.entity.PokemonInfoResponse
 import spock.lang.Specification
 import spock.lang.Unroll
 
-class PokemonInfoUseCaseImplTest extends Specification {
+class GetPokemonInfoImplTest extends Specification {
 
     private PokemonRestClient repository
-    private PokemonInfoUseCaseImpl pokemonInfoUseCase
+    private GetPokemonInfoImpl pokemonInfoUseCase
 
     def setup() {
         repository = Mock(PokemonRestClient)
-        pokemonInfoUseCase = new PokemonInfoUseCaseImpl(repository)
+        pokemonInfoUseCase = new GetPokemonInfoImpl(repository)
     }
 
     def "Given valid pokemon spec it returns its basic information"() {
@@ -35,7 +35,7 @@ class PokemonInfoUseCaseImplTest extends Specification {
                          new FlavorVersion("blue"))
                 ], new Habitat("rare"), true)
         when:
-        def pokemonInfo = pokemonInfoUseCase.getBasicPokemonInfo(validPokemonName)
+        def pokemonInfo = pokemonInfoUseCase.execute(validPokemonName)
         then:
         1 * repository.getPokemonSpec(validPokemonName) >> validPokemonSpec
         0 * repository.getPokemonSpec(_)
@@ -47,7 +47,7 @@ class PokemonInfoUseCaseImplTest extends Specification {
         given:
         def validPokemonName = "mewtwo"
         when:
-        def pokemonInfo = pokemonInfoUseCase.getBasicPokemonInfo(validPokemonName)
+        def pokemonInfo = pokemonInfoUseCase.execute(validPokemonName)
         then:
         1 * repository.getPokemonSpec(validPokemonName) >> invalidPokemonSpec
         0 * repository.getPokemonSpec(_)

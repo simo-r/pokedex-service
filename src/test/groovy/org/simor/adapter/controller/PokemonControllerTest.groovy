@@ -1,16 +1,16 @@
 package org.simor.adapter.controller
 
-import org.simor.application.usecase.PokemonInfoUseCase
+import org.simor.application.usecase.GetPokemonInfoUseCase
 import org.simor.entity.PokemonInfoResponse
 import spock.lang.Specification
 
 class PokemonControllerTest extends Specification {
 
-    private PokemonInfoUseCase pokemonInfoUseCase
+    private GetPokemonInfoUseCase pokemonInfoUseCase
     private PokemonController controller
 
     def setup() {
-        pokemonInfoUseCase = Mock(PokemonInfoUseCase)
+        pokemonInfoUseCase = Mock(GetPokemonInfoUseCase)
         controller = new PokemonController(pokemonInfoUseCase)
     }
 
@@ -21,8 +21,8 @@ class PokemonControllerTest extends Specification {
         when:
         def info = controller.getPokemonInfo(pokemonName)
         then:
-        1 * pokemonInfoUseCase.getBasicPokemonInfo(pokemonName) >> pokemonInfo
-        0 * pokemonInfoUseCase.getBasicPokemonInfo(_)
+        1 * pokemonInfoUseCase.execute(pokemonName) >> pokemonInfo
+        0 * pokemonInfoUseCase.execute(_)
         info == pokemonInfo
     }
 }

@@ -1,7 +1,7 @@
 package org.simor.adapter.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.simor.application.usecase.PokemonInfoUseCase;
+import org.simor.application.usecase.GetPokemonInfoUseCase;
 import org.simor.entity.PokemonInfoResponse;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class PokemonController {
 
-    private final PokemonInfoUseCase pokemonInfoUseCase;
+    private final GetPokemonInfoUseCase getPokemonInfoUseCase;
 
     @GetMapping(value = "/pokemon/{pokemonName}", produces = "application/json")
     public PokemonInfoResponse getPokemonInfo(@PathVariable String pokemonName) {
-        return pokemonInfoUseCase.getBasicPokemonInfo(pokemonName);
+        return getPokemonInfoUseCase.execute(pokemonName);
     }
 }
