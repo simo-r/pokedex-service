@@ -11,6 +11,7 @@ Fun Pokedex in the form of a REST API, it returns:
 
 ### Build & Test
 
+Test requires docker environment as the service uses `testcontainer` framework to boot instances
 Run complete build and test
 ```shell
 ./gradlew build
@@ -31,7 +32,7 @@ Run tests
 ### Docker
 TODO
 
-## API used
+## Third-party api
 
 ### Pokedex
 https://pokeapi.co/api/v2/pokemon-species/mewtwo
@@ -41,14 +42,21 @@ https://pokeapi.co/api/v2/pokemon-species/mewtwo
 - Choose default pokedex flavour: RED (?)
 
 
+## Usage
 
+### Basic Pokemon information endpoint
+Substitute the {pokemon-name} with an existing Pokemon name
+```shell
+curl --request GET \
+  --url http://localhost:8080/v1/pokemon/{pokemon-name}
+```
 
 
 ## Production readiness
 
 ### Functional
 - Authentication & Authorization
--
+- Logging 
 
 ### Business
 - Multiple locale support
