@@ -2,7 +2,7 @@ package org.simor.application.usecase.impl
 
 import org.simor.adapter.client.PokemonRestClient
 import org.simor.application.usecase.PokemonInfoUseCaseImpl
-import org.simor.application.usecase.PokemonDescriptionFlavorException
+
 import org.simor.entity.FlavorLanguage
 import org.simor.entity.FlavorTextEntry
 import org.simor.entity.FlavorVersion
@@ -43,16 +43,15 @@ class PokemonInfoUseCaseImplTest extends Specification {
     }
 
     @Unroll
-    def "Given pokemon spec without required flavor description it throws PokemonDescriptionFlavorNotPresent"() {
+    def "Given pokemon spec without required flavor description it return empty description"() {
         given:
         def validPokemonName = "mewtwo"
         when:
-        pokemonInfoUseCase.getBasicPokemonInfo(validPokemonName)
+        def pokemonInfo = pokemonInfoUseCase.getBasicPokemonInfo(validPokemonName)
         then:
         1 * repository.getPokemonSpec(validPokemonName) >> invalidPokemonSpec
         0 * repository.getPokemonSpec(_)
-        def e = thrown PokemonDescriptionFlavorException
-        e.getMessage() == "Flavor with language en and version red does not exist"
+        pokemonInfo == new PokemonInfoResponse("mewtwo", "", "rare", true)
         where:
         invalidPokemonSpec <<
                 [new PokemonSpec("mewtwo",
