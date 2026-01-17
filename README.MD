@@ -57,6 +57,7 @@ curl --request GET \
 ### Functional
 - Authentication & Authorization
 - Logging 
+- Data model validation: add optional/required fields, nullable
 
 ### Business
 - Multiple locale support
