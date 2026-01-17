@@ -1,4 +1,4 @@
-package org.simor.application.usecase.exception;
+package org.simor.application.usecase;
 
 public class PokemonDescriptionFlavorException extends RuntimeException {
 

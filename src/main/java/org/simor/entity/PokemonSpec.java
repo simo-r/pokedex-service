@@ -1,4 +1,4 @@
-package org.simor.entity.dto;
+package org.simor.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

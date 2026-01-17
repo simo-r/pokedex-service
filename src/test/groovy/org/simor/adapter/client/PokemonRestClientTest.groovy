@@ -1,13 +1,11 @@
 package org.simor.adapter.client
 
-import org.simor.entity.dto.FlavorLanguage
-import org.simor.entity.dto.FlavorTextEntry
-import org.simor.entity.dto.FlavorVersion
-import org.simor.entity.dto.Habitat
-import org.simor.entity.dto.PokemonSpec
+import org.simor.entity.FlavorLanguage
+import org.simor.entity.FlavorTextEntry
+import org.simor.entity.FlavorVersion
+import org.simor.entity.Habitat
+import org.simor.entity.PokemonSpec
 import org.springframework.http.HttpStatus
-import org.springframework.web.client.HttpClientErrorException
-import org.springframework.web.client.HttpServerErrorException
 import org.testcontainers.spock.Testcontainers
 import org.wiremock.integrations.testcontainers.WireMockContainer
 import spock.lang.Shared
@@ -50,7 +48,7 @@ class PokemonRestClientTest extends Specification {
 
     }
 
-    def "Given unexisting pokemon it throws PokemonRestClientException with status 404"() {
+    def "Given unexisting pokemon it throws a not found exception"() {
         when:
         pokemonRestClient.getPokemonSpec("notExist")
         then:
@@ -59,7 +57,7 @@ class PokemonRestClientTest extends Specification {
         e.getMessage() == "404 Not Found: \"Not found\""
     }
 
-    def "Given server error it throws PokemonRestClientException with status 500"() {
+    def "Given server error it throws internal server error exception"() {
         when:
         pokemonRestClient.getPokemonSpec("error")
         then:

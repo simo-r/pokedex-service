@@ -1,7 +1,7 @@
 package org.simor.adapter.controller
 
 import org.simor.application.usecase.PokemonInfoUseCase
-import org.simor.entity.model.PokemonInfoResponse
+import org.simor.entity.PokemonInfoResponse
 import spock.lang.Specification
 
 class PokemonControllerTest extends Specification {

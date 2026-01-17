@@ -1,12 +1,10 @@
-package org.simor.application.usecase.impl;
+package org.simor.application.usecase;
 
 import lombok.RequiredArgsConstructor;
 import org.simor.adapter.client.PokemonRestClient;
-import org.simor.application.usecase.PokemonInfoUseCase;
-import org.simor.application.usecase.exception.PokemonDescriptionFlavorException;
-import org.simor.entity.dto.FlavorTextEntry;
-import org.simor.entity.dto.PokemonSpec;
-import org.simor.entity.model.PokemonInfoResponse;
+import org.simor.entity.FlavorTextEntry;
+import org.simor.entity.PokemonSpec;
+import org.simor.entity.PokemonInfoResponse;
 import org.springframework.stereotype.Component;
 
 

@@ -54,6 +54,7 @@ curl --request GET \
 - Logging 
 - Data model validation: add optional/required fields, nullable
 - Improve exception handling: rest client exceptions, business logic exceptions
+- Decoupling adapter models and internal DTOs
 
 ### Business
 - Multiple locale support

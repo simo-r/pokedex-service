@@ -1,13 +1,14 @@
 package org.simor.application.usecase.impl
 
 import org.simor.adapter.client.PokemonRestClient
-import org.simor.application.usecase.exception.PokemonDescriptionFlavorException
-import org.simor.entity.dto.FlavorLanguage
-import org.simor.entity.dto.FlavorTextEntry
-import org.simor.entity.dto.FlavorVersion
-import org.simor.entity.dto.Habitat
-import org.simor.entity.dto.PokemonSpec
-import org.simor.entity.model.PokemonInfoResponse
+import org.simor.application.usecase.PokemonInfoUseCaseImpl
+import org.simor.application.usecase.PokemonDescriptionFlavorException
+import org.simor.entity.FlavorLanguage
+import org.simor.entity.FlavorTextEntry
+import org.simor.entity.FlavorVersion
+import org.simor.entity.Habitat
+import org.simor.entity.PokemonSpec
+import org.simor.entity.PokemonInfoResponse
 import spock.lang.Specification
 import spock.lang.Unroll
 

@@ -1,6 +1,6 @@
 package org.simor.adapter.client;
 
-import org.simor.entity.dto.PokemonSpec;
+import org.simor.entity.PokemonSpec;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;

@@ -2,7 +2,7 @@ package org.simor.adapter.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.simor.application.usecase.PokemonInfoUseCase;
-import org.simor.entity.model.PokemonInfoResponse;
+import org.simor.entity.PokemonInfoResponse;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
