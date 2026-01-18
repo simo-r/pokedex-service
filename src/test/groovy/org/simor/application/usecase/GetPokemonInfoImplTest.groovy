@@ -1,8 +1,6 @@
-package org.simor.application.usecase.impl
+package org.simor.application.usecase
 
 import org.simor.adapter.client.PokemonRestClient
-import org.simor.application.usecase.GetPokemonInfoImpl
-
 import org.simor.entity.FlavorLanguage
 import org.simor.entity.FlavorTextEntry
 import org.simor.entity.FlavorVersion
