@@ -19,7 +19,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @Testcontainers
 @AutoConfigureMockMvc
-// TODO Complete integration tests with failure scenarios
 class PokemonInfoIntegrationTest extends Specification {
 
     @Shared

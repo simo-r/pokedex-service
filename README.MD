@@ -63,6 +63,7 @@ curl --request GET \
 - Improve exception handling: rest client exceptions, business logic exceptions
 - Decoupling adapter models and internal DTOs
 - Cache external dependencies response
+- Clients should be abstracted from the actual implementation of using Spring Rest Client
 
 ### Business
 - Multiple locale support
