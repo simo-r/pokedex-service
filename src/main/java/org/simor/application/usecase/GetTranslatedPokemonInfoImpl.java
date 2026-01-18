@@ -12,7 +12,7 @@ import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
-public class GetFunPokemonInfoImpl implements GetFunPokemonInfoUseCase {
+public class GetTranslatedPokemonInfoImpl implements GetTranslatedPokemonInfoUseCase {
 
     private final GetPokemonInfoUseCase getPokemonInfoUseCase;
     private final Map<TranslationStrategy, TranslationClient> strategyTranslationClientMap;
@@ -23,7 +23,7 @@ public class GetFunPokemonInfoImpl implements GetFunPokemonInfoUseCase {
         if (!StringUtils.hasText(pokemonInfoResponse.description())) {
             return pokemonInfoResponse;
         }
-        String funDescription = strategyTranslationClientMap
+        String translatedDescription = strategyTranslationClientMap
                 .entrySet()
                 .stream()
                 .filter(entry ->
@@ -34,7 +34,7 @@ public class GetFunPokemonInfoImpl implements GetFunPokemonInfoUseCase {
                 .orElse(pokemonInfoResponse.description());
         return new PokemonInfoResponse(
                 pokemonInfoResponse.name(),
-                funDescription,
+                translatedDescription,
                 pokemonInfoResponse.habitat(),
                 pokemonInfoResponse.isLegendary());
     }
