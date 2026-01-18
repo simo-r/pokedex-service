@@ -64,6 +64,13 @@ curl --request GET \
   --url http://localhost:8080/v1/pokemon/{pokemon-name}
 ```
 
+### Translated basic Pokemon information endpoint
+Substitute the {pokemon-name} with an existing Pokemon name
+```shell
+curl --request GET \
+  --url http://localhost:8080/v1/pokemon/translated/{pokemon-name}
+```
+
 ## Production readiness
 
 ### Functional
