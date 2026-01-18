@@ -20,6 +20,7 @@ class PokemonRestClientTest extends Specification {
             .withMappingFromResource("pokemon_success_mewtwo.json")
             .withMappingFromResource("pokemon_not_found.json")
             .withMappingFromResource("pokemon_internal_server_error.json")
+            .withMappingFromResource("pokemon_malformed_response.json")
     @Shared
     private PokemonRestClient pokemonRestClient
 
@@ -63,6 +64,14 @@ class PokemonRestClientTest extends Specification {
         then:
         def e = thrown PokemonRestClientException
         e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR
+    }
+
+    def "Given malformed response it throws bad gateway error exception"() {
+        when:
+        pokemonRestClient.getPokemonSpec("malformed")
+        then:
+        def e = thrown PokemonRestClientException
+        e.getStatusCode() == HttpStatus.BAD_GATEWAY
     }
 
 }
