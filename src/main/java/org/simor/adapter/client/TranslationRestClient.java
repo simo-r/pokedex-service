@@ -14,13 +14,12 @@ import org.springframework.web.client.RestClientResponseException;
 
 import java.util.Optional;
 
-@Component
 public class TranslationRestClient {
 
     private final RestClient translationRestClient;
 
-    TranslationRestClient(@Value("${rest-client.translation.base-url}") String baseUrl) {
-        translationRestClient = RestClient.builder().baseUrl(String.format("%s/translate/shakespeare.json", baseUrl)).build();
+    public TranslationRestClient(String baseUrl, String path) {
+        translationRestClient = RestClient.builder().baseUrl(String.format("%s/%s", baseUrl, path)).build();
     }
 
     // Assuming description is not empty

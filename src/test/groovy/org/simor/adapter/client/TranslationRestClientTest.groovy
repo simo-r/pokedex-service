@@ -8,7 +8,6 @@ import spock.lang.Specification
 class TranslationRestClientTest extends Specification {
 
     @Shared
-    //TODO Remove deprecation warning
     WireMockContainer mockServer = new WireMockContainer("wiremock/wiremock")
             .withMappingFromResource("translation_success.json")
             .withMappingFromResource("translation_bad_request.json")
@@ -20,7 +19,7 @@ class TranslationRestClientTest extends Specification {
 
     def setupSpec() {
         mockServer.start()
-        translationRestClient = new TranslationRestClient(mockServer.getBaseUrl())
+        translationRestClient = new TranslationRestClient(mockServer.getBaseUrl(), "translate/shakespeare.json")
     }
 
     def cleanupSpec() {

@@ -1,5 +1,9 @@
 rest-client:
   pokemon:
     base-url: https://pokeapi.co
-  translation:
+  shakespeare-translation:
     base-url: https://api.funtranslations.com
+    path: translate/shakespeare.json
+  yoda-translation:
+    base-url: https://api.funtranslations.com
+    path: translate/yoda.json
