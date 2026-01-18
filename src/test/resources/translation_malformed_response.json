@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "POST",
+    "urlPath": "/translate/shakespeare.json",
+    "bodyPatterns": [{
+      "contains": "malformed"
+    }]
+  },
+  "response": {
+    "status": 200,
+    "body" : "{{{",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

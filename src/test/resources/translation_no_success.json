@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "POST",
+    "urlPath": "/translate/shakespeare.json",
+    "bodyPatterns": [{
+      "contains": "no+success"
+    }]
+  },
+  "response": {
+    "status": 200,
+    "body" : "{\n  \"success\": {\n    \"total\": 0\n  }\n}",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

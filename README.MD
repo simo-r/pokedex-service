@@ -13,6 +13,10 @@ Fun Pokedex in the form of a REST API, it returns:
 
 Test requires docker environment as the service uses `testcontainer` framework to boot instances
 Run complete build and test
+
+[!NOTE]
+Start docker daemon before running tests
+
 ```shell
 ./gradlew build
 ```
@@ -37,6 +41,9 @@ TODO
 ### Pokedex
 https://pokeapi.co/api/v2/pokemon-species
 
+### Fun description translation
+1. For `cave` or legendary pokemons: https://funtranslations.com/api/yoda
+2. Others: https://funtranslations.com/api/shakespeare
 
 ## Usage
 
@@ -55,6 +62,7 @@ curl --request GET \
 - Data model validation: add optional/required fields, nullable
 - Improve exception handling: rest client exceptions, business logic exceptions
 - Decoupling adapter models and internal DTOs
+- Cache external dependencies response
 
 ### Business
 - Multiple locale support

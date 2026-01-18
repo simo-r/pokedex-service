@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "POST",
+    "urlPath": "/translate/shakespeare.json",
+    "bodyPatterns": [{
+      "contains": "a+bad+request"
+    }]
+  },
+  "response": {
+    "status": 400,
+    "body": "{\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"Bad Request\"\n  }\n}",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

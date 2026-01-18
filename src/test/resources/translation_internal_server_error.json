@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "POST",
+    "urlPath": "/translate/shakespeare.json",
+    "bodyPatterns": [{
+      "contains": "internal+error"
+    }]
+  },
+  "response": {
+    "status": 500,
+    "body": "{\n  \"error\": {\n    \"code\": 500,\n    \"message\": \"Internal Server Error\"\n  }\n}",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

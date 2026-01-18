@@ -16,7 +16,7 @@ import spock.lang.Specification
 class PokemonRestClientTest extends Specification {
 
     @Shared
-    WireMockContainer mockServer = new WireMockContainer(WireMockContainer.WIREMOCK_2_LATEST)
+    WireMockContainer mockServer = new WireMockContainer("wiremock/wiremock")
             .withMappingFromResource("pokemon_success_mewtwo.json")
             .withMappingFromResource("pokemon_not_found.json")
             .withMappingFromResource("pokemon_internal_server_error.json")
