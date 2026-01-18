@@ -34,7 +34,17 @@ Run tests
 ```
 
 ### Docker
-TODO
+
+#### Build
+
+```shell
+docker build -t pokedex-service:1.0 .
+```
+
+#### Run
+```shell
+docker run -p 8080:8080 pokedex-service:1.0
+```
 
 ## Third-party api
 

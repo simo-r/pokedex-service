@@ -4,6 +4,8 @@ plugins {
     id 'groovy'
     id 'idea'
     id("io.freefair.lombok") version "9.0.0-rc2"
+    id("org.springframework.boot") version "3.5.9"
+    id("io.spring.dependency-management") version "1.1.7"
 }
 
 group = 'org.simor'
@@ -11,6 +13,12 @@ version = '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
 }
 
 idea {
@@ -25,7 +33,7 @@ application {
 }
 
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-web:3.5.9")
+    implementation("org.springframework.boot:spring-boot-starter-web")
 
     testImplementation platform('org.apache.groovy:groovy-bom:4.0.22')
     testImplementation 'org.apache.groovy:groovy'
@@ -33,13 +41,13 @@ dependencies {
     testImplementation "org.spockframework:spock-core"
     testRuntimeOnly 'net.bytebuddy:byte-buddy:1.17.7'
     testRuntimeOnly "org.objenesis:objenesis:3.4"
-    testImplementation("org.springframework.boot:spring-boot-starter-test:3.5.6")
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.spockframework:spock-spring:2.4-M6-groovy-4.0")
     testImplementation platform('org.junit:junit-bom:6.0.0-M1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-    testImplementation "org.testcontainers:testcontainers:2.0.2"
-    testImplementation "org.testcontainers:testcontainers-spock:2.0.2"
+    testImplementation "org.testcontainers:testcontainers:2.0.3"
+    testImplementation "org.testcontainers:testcontainers-spock:2.0.3"
     testImplementation "org.wiremock.integrations.testcontainers:wiremock-testcontainers-module:1.0-alpha-15"
 }
 
