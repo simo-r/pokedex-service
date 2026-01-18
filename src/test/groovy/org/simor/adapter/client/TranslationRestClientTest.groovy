@@ -15,7 +15,7 @@ class TranslationRestClientTest extends Specification {
             .withMappingFromResource("translation_internal_server_error.json")
             .withMappingFromResource("translation_malformed_response.json")
     @Shared
-    private TranslationRestClient translationRestClient
+    private TranslationClient translationRestClient
 
     def setupSpec() {
         mockServer.start()

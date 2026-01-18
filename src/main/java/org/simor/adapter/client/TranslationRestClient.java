@@ -2,10 +2,8 @@ package org.simor.adapter.client;
 
 import org.simor.entity.TranslatedContent;
 import org.simor.entity.TranslatedDescription;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClient;
@@ -14,7 +12,7 @@ import org.springframework.web.client.RestClientResponseException;
 
 import java.util.Optional;
 
-public class TranslationRestClient {
+public class TranslationRestClient implements TranslationClient {
 
     private final RestClient translationRestClient;
 
@@ -23,6 +21,7 @@ public class TranslationRestClient {
     }
 
     // Assuming description is not empty
+    @Override
     public String getTranslation(String description) {
         try {
             MultiValueMap<String, String> formEncodedBody = new LinkedMultiValueMap<>();

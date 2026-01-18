@@ -8,14 +8,14 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class Config {
 
-    @Bean
+    @Bean("shakespeareTranslation")
     public TranslationRestClient shakespeareTranslationRestClient(
             @Value("${rest-client.shakespeare-translation.base-url}") String baseUrl,
             @Value("${rest-client.shakespeare-translation.path}") String path) {
         return new TranslationRestClient(baseUrl, path);
     }
 
-    @Bean
+    @Bean("yodaTranslation")
     public TranslationRestClient yodaTranslationRestClient(
             @Value("${rest-client.yoda-translation.base-url}") String baseUrl,
             @Value("${rest-client.yoda-translation.path}") String path) {
