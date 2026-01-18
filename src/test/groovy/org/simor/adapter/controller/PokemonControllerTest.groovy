@@ -1,17 +1,20 @@
 package org.simor.adapter.controller
 
 import org.simor.application.usecase.GetPokemonInfoUseCase
+import org.simor.application.usecase.GetTranslatedPokemonInfoUseCase
 import org.simor.entity.PokemonInfoResponse
 import spock.lang.Specification
 
 class PokemonControllerTest extends Specification {
 
-    private GetPokemonInfoUseCase pokemonInfoUseCase
+    private GetPokemonInfoUseCase getPokemonInfoUseCase
+    private GetTranslatedPokemonInfoUseCase getTranslatedPokemonInfoUseCase
     private PokemonController controller
 
     def setup() {
-        pokemonInfoUseCase = Mock(GetPokemonInfoUseCase)
-        controller = new PokemonController(pokemonInfoUseCase)
+        getPokemonInfoUseCase = Mock(GetPokemonInfoUseCase)
+        getTranslatedPokemonInfoUseCase = Mock(GetTranslatedPokemonInfoUseCase)
+        controller = new PokemonController(getPokemonInfoUseCase, getTranslatedPokemonInfoUseCase)
     }
 
     def "Given a pokemon name it returns its basic information"() {
@@ -21,8 +24,20 @@ class PokemonControllerTest extends Specification {
         when:
         def info = controller.getPokemonInfo(pokemonName)
         then:
-        1 * pokemonInfoUseCase.execute(pokemonName) >> pokemonInfo
-        0 * pokemonInfoUseCase.execute(_)
+        1 * getPokemonInfoUseCase.execute(pokemonName) >> pokemonInfo
+        0 * getPokemonInfoUseCase.execute(_)
+        info == pokemonInfo
+    }
+
+    def "Given a pokemon name it returns its translated basic information"() {
+        given:
+        def pokemonName = "aName"
+        def pokemonInfo = new PokemonInfoResponse(pokemonName, "Translated description", "Habitat", false)
+        when:
+        def info = controller.getTranslatedPokemonInfo(pokemonName)
+        then:
+        1 * getTranslatedPokemonInfoUseCase.execute(pokemonName) >> pokemonInfo
+        0 * getTranslatedPokemonInfoUseCase.execute(_)
         info == pokemonInfo
     }
 }
