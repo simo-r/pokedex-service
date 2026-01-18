@@ -22,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class PokemonInfoIntegrationTest extends Specification {
 
     @Shared
-    static WireMockContainer mockServer = new WireMockContainer(WireMockContainer.WIREMOCK_2_LATEST)
+    static WireMockContainer mockServer = new WireMockContainer("wiremock/wiremock")
             .withMappingFromResource("pokemon_success_mewtwo.json")
             .withMappingFromResource("pokemon_not_found.json")
             .withMappingFromResource("pokemon_internal_server_error.json")
@@ -36,7 +36,7 @@ class PokemonInfoIntegrationTest extends Specification {
     static void dynamicProperties(DynamicPropertyRegistry registry) {
         registry.add("rest-client.pokemon.base-url", () -> {
             mockServer.getBaseUrl()
-        });
+        })
     }
 
     def setupSpec() {

@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "POST",
+    "urlPath": "/translate/shakespeare.json",
+    "bodyPatterns": [{
+      "contains": "A+strange+seed+was+planted+on+its+back+at+birth."
+    }]
+  },
+  "response": {
+    "status": 200,
+    "body" : "{\n  \"success\": {\n    \"total\": 1\n  },\n  \"contents\": {\n    \"translated\": \"Shakespeare translated description\",\n    \"text\": \"A strange seed was planted on its back at birth.\",\n    \"translation\": \"yoda\"\n  }\n}",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

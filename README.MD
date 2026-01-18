@@ -64,6 +64,7 @@ curl --request GET \
 - Decoupling adapter models and internal DTOs
 - Cache external dependencies response
 - Clients should be abstracted from the actual implementation of using Spring Rest Client
+- Integration tests stub could be improved by decoupling and make use case more explicit
 
 ### Business
 - Multiple locale support

@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "POST",
+    "urlPath": "/translate/yoda.json",
+    "bodyPatterns": [{
+      "contains": "Red+sample+description"
+    }]
+  },
+  "response": {
+    "status": 200,
+    "body" : "{\n  \"success\": {\n    \"total\": 1\n  },\n  \"contents\": {\n    \"translated\": \"Yoda translated description\",\n    \"text\": \"Red sample description\",\n    \"translation\": \"yoda\"\n  }\n}",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}
