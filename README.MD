@@ -89,7 +89,10 @@ curl --request GET \
 - Improve exception handling: rest client exceptions, business logic exceptions, Spring rest controllers exception
 - Clients should be abstracted from the actual implementation of using Spring Rest Client
 - Integration tests stub could be improved by decoupling and make use case more explicit
-- Cache our API responses
+- Distributed cache
+  - third-party api
+  - our api
+- Rate limiter: may be implemented at architecture level
 
 ### Business
 - Multiple locale support
