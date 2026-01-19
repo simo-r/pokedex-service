@@ -1,15 +1,20 @@
 package org.simor.adapter.client;
 
+import io.github.resilience4j.retry.annotation.Retry;
 import org.simor.entity.TranslatedContent;
 import org.simor.entity.TranslatedDescription;
+import org.springframework.boot.http.client.ClientHttpRequestFactoryBuilder;
+import org.springframework.boot.http.client.ClientHttpRequestFactorySettings;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.JdkClientHttpRequestFactory;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestClientResponseException;
 
+import java.time.Duration;
 import java.util.Optional;
 
 public class TranslationRestClient implements TranslationClient {
@@ -17,11 +22,20 @@ public class TranslationRestClient implements TranslationClient {
     private final RestClient translationRestClient;
 
     public TranslationRestClient(String baseUrl, String path) {
-        translationRestClient = RestClient.builder().baseUrl(String.format("%s/%s", baseUrl, path)).build();
+        ClientHttpRequestFactorySettings requestFactorySettings = ClientHttpRequestFactorySettings.defaults()
+                //TODO Make them configurable
+                .withConnectTimeout(Duration.ofMillis(200))
+                .withReadTimeout(Duration.ofMillis(200));
+        JdkClientHttpRequestFactory requestFactory = ClientHttpRequestFactoryBuilder.jdk().build(requestFactorySettings);
+        translationRestClient = RestClient.builder()
+                .baseUrl(String.format("%s/%s", baseUrl, path))
+                .requestFactory(requestFactory)
+                .build();
     }
 
     // Assuming description is not empty
     @Override
+    @Retry(name = "translation")
     public String getTranslation(String description) {
         try {
             MultiValueMap<String, String> formEncodedBody = new LinkedMultiValueMap<>();

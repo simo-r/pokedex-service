@@ -17,6 +17,16 @@ class RestClientRetryPredicateTest extends Specification {
         !predicate.test(new PokemonRestClientException(HttpStatus.BAD_REQUEST, "Error"))
     }
 
+    def "Given TranslationRestClientException with 5xx status code it returns true"(){
+        expect:
+        predicate.test(new TranslationRestClientException(HttpStatus.INTERNAL_SERVER_ERROR, "Error"))
+    }
+
+    def "Given TranslationRestClientException with 4xx status code it returns false"(){
+        expect:
+        !predicate.test(new TranslationRestClientException(HttpStatus.BAD_REQUEST, "Error"))
+    }
+
     def "Given generic throwable it returns false"(){
         expect:
         !predicate.test(new RuntimeException("Error"))

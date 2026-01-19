@@ -1,0 +1,43 @@
+{
+  "mappings": [
+    {
+      "scenarioName": "retry-response-delay-scenario",
+      "requiredScenarioState": "Started",
+      "newScenarioState": "second-request",
+      "request": {
+        "method": "POST",
+        "urlPath": "/translate/shakespeare.json",
+        "bodyPatterns": [{
+          "contains": "my+fancy+delayed+description"
+        }]
+      },
+      "response": {
+        "status": 200,
+        "body" : "{\n  \"success\": {\n    \"total\": 1\n  },\n  \"contents\": {\n    \"translated\": \"Mine plaited delayed description\",\n    \"text\": \"my fancy description\",\n    \"translation\": \"shakespeare\"\n  }\n}",
+        "fixedDelayMilliseconds": 600,
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    {
+      "scenarioName": "retry-response-delay-scenario",
+      "requiredScenarioState": "second-request",
+      "request": {
+        "method": "POST",
+        "urlPath": "/translate/shakespeare.json",
+        "bodyPatterns": [{
+          "contains": "my+fancy+delayed+description"
+        }]
+      },
+      "response": {
+        "status": 200,
+        "body" : "{\n  \"success\": {\n    \"total\": 1\n  },\n  \"contents\": {\n    \"translated\": \"Mine plaited delayed description\",\n    \"text\": \"my fancy description\",\n    \"translation\": \"shakespeare\"\n  }\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    }
+  ]
+}
+

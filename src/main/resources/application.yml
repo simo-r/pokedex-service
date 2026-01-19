@@ -17,3 +17,5 @@ resilience4j.retry:
   instances:
     pokemon:
       baseConfig: default
+    translation:
+      baseConfig: default

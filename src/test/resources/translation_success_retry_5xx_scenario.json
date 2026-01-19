@@ -1,0 +1,38 @@
+{
+  "mappings": [
+    {
+      "scenarioName": "retry-response-error-scenario",
+      "requiredScenarioState": "Started",
+      "newScenarioState": "second-request",
+      "request": {
+        "method": "POST",
+        "urlPath": "/translate/shakespeare.json",
+        "bodyPatterns": [{
+          "contains": "my+fancy+error+description"
+        }]
+      },
+      "response": {
+        "status": 500
+      }
+    },
+    {
+      "scenarioName": "retry-response-error-scenario",
+      "requiredScenarioState": "second-request",
+      "request": {
+        "method": "POST",
+        "urlPath": "/translate/shakespeare.json",
+        "bodyPatterns": [{
+          "contains": "my+fancy+error+description"
+        }]
+      },
+      "response": {
+        "status": 200,
+        "body" : "{\n  \"success\": {\n    \"total\": 1\n  },\n  \"contents\": {\n    \"translated\": \"Mine plaited error description\",\n    \"text\": \"my fancy description\",\n    \"translation\": \"shakespeare\"\n  }\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    }
+  ]
+}
+
