@@ -2,6 +2,7 @@ package org.simor.adapter.client;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
+import lombok.extern.slf4j.Slf4j;
 import org.simor.config.RestClientProperties;
 import org.simor.entity.model.TranslatedDescription;
 import org.springframework.boot.http.client.ClientHttpRequestFactoryBuilder;
@@ -19,6 +20,7 @@ import org.springframework.web.client.RestClientResponseException;
 import java.time.Duration;
 import java.util.Optional;
 
+@Slf4j
 public class TranslationRestClient implements TranslationClient {
 
     private final RestClient translationRestClient;
@@ -40,6 +42,7 @@ public class TranslationRestClient implements TranslationClient {
     @CircuitBreaker(name = "cb-translation")
     @Cacheable("cache-translation")
     public String getTranslation(String description) {
+        log.info("Outbound HTTP Request. description {}", description);
         try {
             MultiValueMap<String, String> formEncodedBody = new LinkedMultiValueMap<>();
             formEncodedBody.add("text", description);
@@ -48,6 +51,7 @@ public class TranslationRestClient implements TranslationClient {
                     .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                     .retrieve()
                     .body(TranslatedDescription.class);
+            log.info("Outbound HTTP Response. Response {}", translatedDescription);
             return Optional.ofNullable(translatedDescription)
                     .map(TranslatedDescription::contents)
                     .map(TranslatedDescription.Content::translated)
@@ -55,8 +59,10 @@ public class TranslationRestClient implements TranslationClient {
                             new TranslationRestClientException(HttpStatus.BAD_GATEWAY, "Unable to map response"));
         } catch (RestClientResponseException ex) {
             // exception thrown by ResponseSpec when status code >= 400
+            log.info("Exception occurred.", ex);
             throw new TranslationRestClientException(ex.getStatusCode(), ex.getMessage());
         } catch (RestClientException ex) {
+            log.info("Exception occurred.", ex);
             throw new TranslationRestClientException(HttpStatus.BAD_GATEWAY, "Unexpected error occurred");
         }
     }
