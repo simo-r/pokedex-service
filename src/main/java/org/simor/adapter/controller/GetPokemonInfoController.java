@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/v1/pokemon")
 @RequiredArgsConstructor
-public class PokemonController {
+public class GetPokemonInfoController {
 
     private final GetPokemonInfoUseCase getPokemonInfoUseCase;
     private final GetTranslatedPokemonInfoUseCase getTranslatedPokemonInfoUseCase;

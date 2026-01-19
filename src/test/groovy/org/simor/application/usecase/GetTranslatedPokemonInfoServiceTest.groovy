@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus
 import spock.lang.Specification
 import spock.lang.Unroll
 
-class GetTranslatedPokemonInfoImplTest extends Specification {
+class GetTranslatedPokemonInfoServiceTest extends Specification {
 
     private GetPokemonInfoUseCase getPokemonInfoUseCase
     private Map<TranslationStrategy, TranslationClient> strategyTranslationClientMap;
@@ -17,7 +17,7 @@ class GetTranslatedPokemonInfoImplTest extends Specification {
     def setup() {
         getPokemonInfoUseCase = Mock(GetPokemonInfoUseCase)
         strategyTranslationClientMap = Mock(Map)
-        getTranslatedPokemonInfo = new GetTranslatedPokemonInfoImpl(getPokemonInfoUseCase, strategyTranslationClientMap)
+        getTranslatedPokemonInfo = new GetTranslatedPokemonInfoService(getPokemonInfoUseCase, strategyTranslationClientMap)
     }
 
     def "Given pokemon name it returns translated pokemon info"() {

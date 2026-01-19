@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class GetPokemonInfoImpl implements GetPokemonInfoUseCase {
+public class GetPokemonInfoService implements GetPokemonInfoUseCase {
 
     public static final String DEFAULT_LANGUAGE = "en";
     public static final String DEFAULT_FLAVOR = "red";
