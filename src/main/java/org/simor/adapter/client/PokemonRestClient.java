@@ -1,5 +1,6 @@
 package org.simor.adapter.client;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import org.simor.config.RestClientProperties;
 import org.simor.entity.PokemonSpec;
@@ -32,7 +33,8 @@ public class PokemonRestClient {
                 .build();
     }
 
-    @Retry(name = "pokemon")
+    @Retry(name = "retry-pokemon")
+    @CircuitBreaker(name = "cb-pokemon")
     public PokemonSpec getPokemonSpec(String pokemonName) {
         try {
             return pokemonRestClient.get()

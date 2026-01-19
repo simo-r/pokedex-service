@@ -1,5 +1,6 @@
 package org.simor
 
+import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
@@ -21,6 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 class PokemonInfoIntegrationTest extends Specification {
 
+    private static final CB_NAME = 'cb-pokemon'
     @Shared
     static WireMockContainer mockServer = new WireMockContainer("wiremock/wiremock")
             .withMappingFromResource("pokemon_success_mewtwo.json")
@@ -31,6 +33,8 @@ class PokemonInfoIntegrationTest extends Specification {
 
     @Autowired
     MockMvc mockMvc
+    @Autowired
+    protected CircuitBreakerRegistry circuitBreakerRegistry
 
     @DynamicPropertySource
     static void dynamicProperties(DynamicPropertyRegistry registry) {
@@ -41,6 +45,14 @@ class PokemonInfoIntegrationTest extends Specification {
 
     def setupSpec() {
         mockServer.start()
+    }
+
+    def setup() {
+        circuitBreakerRegistry.circuitBreaker(CB_NAME).transitionToClosedState()
+    }
+
+    def cleanup() {
+        circuitBreakerRegistry.circuitBreaker(CB_NAME).transitionToClosedState()
     }
 
     def cleanupSpec() {
@@ -93,5 +105,15 @@ class PokemonInfoIntegrationTest extends Specification {
         then:
         result.andExpect(status().isInternalServerError())
                 .andExpect(jsonPath('$.message').value("Unexpected error fetching Pokemon information"))
+    }
+
+    def "Given circuit breaker open while fetching pokemon info it returns 503 Service temporary unavailable"() {
+        given:
+        circuitBreakerRegistry.circuitBreaker(CB_NAME).transitionToOpenState()
+        when:
+        def result = mockMvc.perform(get("/v1/pokemon/mewtwo"))
+        then:
+        result.andExpect(status().isServiceUnavailable())
+                .andExpect(jsonPath('$.message').value("Service temporary unavailable"))
     }
 }

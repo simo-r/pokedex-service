@@ -1,5 +1,6 @@
 package org.simor
 
+import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
@@ -17,7 +18,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @Testcontainers
 @AutoConfigureMockMvc
+//TODO Add API error integration test: not found, bad request
 class TranslatedPokemonInfoIntegrationTest extends Specification {
+
+    private static final CB_POKEMON = 'cb-pokemon'
+    private static final CB_TRANSLATION = 'cb-translation'
 
     @Shared
     static WireMockContainer mockServer = new WireMockContainer("wiremock/wiremock")
@@ -36,6 +41,8 @@ class TranslatedPokemonInfoIntegrationTest extends Specification {
 
     @Autowired
     MockMvc mockMvc
+    @Autowired
+    protected CircuitBreakerRegistry circuitBreakerRegistry
 
     @DynamicPropertySource
     static void dynamicProperties(DynamicPropertyRegistry registry) {
@@ -52,6 +59,16 @@ class TranslatedPokemonInfoIntegrationTest extends Specification {
 
     def setupSpec() {
         mockServer.start()
+    }
+
+    def setup() {
+        circuitBreakerRegistry.circuitBreaker(CB_POKEMON).transitionToClosedState()
+        circuitBreakerRegistry.circuitBreaker(CB_TRANSLATION).transitionToClosedState()
+    }
+
+    def cleanup() {
+        circuitBreakerRegistry.circuitBreaker(CB_POKEMON).transitionToClosedState()
+        circuitBreakerRegistry.circuitBreaker(CB_TRANSLATION).transitionToClosedState()
     }
 
     def cleanupSpec() {
@@ -140,5 +157,25 @@ class TranslatedPokemonInfoIntegrationTest extends Specification {
                 .andExpect(jsonPath('$.description').value("It may mutate"))
                 .andExpect(jsonPath('$.habitat').value("urban"))
                 .andExpect(jsonPath('$.is_legendary').value(false))
+    }
+
+    def "Given circuit breaker open while fetching pokemon info it returns 503 Service temporary unavailable"() {
+        given:
+        circuitBreakerRegistry.circuitBreaker(CB_POKEMON).transitionToOpenState()
+        when:
+        def result = mockMvc.perform(get("/v1/pokemon/translated/mewtwo"))
+        then:
+        result.andExpect(status().isServiceUnavailable())
+                .andExpect(jsonPath('$.message').value("Service temporary unavailable"))
+    }
+
+    def "Given circuit breaker open while fetching translations it returns 503 Service temporary unavailable"() {
+        given:
+        circuitBreakerRegistry.circuitBreaker(CB_TRANSLATION).transitionToOpenState()
+        when:
+        def result = mockMvc.perform(get("/v1/pokemon/translated/mewtwo"))
+        then:
+        result.andExpect(status().isServiceUnavailable())
+                .andExpect(jsonPath('$.message').value("Service temporary unavailable"))
     }
 }

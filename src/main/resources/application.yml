@@ -21,7 +21,24 @@ resilience4j.retry:
       waitDuration: 100
       retryExceptionPredicate: org.simor.adapter.client.RestClientRetryPredicate
   instances:
-    pokemon:
+    retry-pokemon:
       baseConfig: default
-    translation:
+    retry-translation:
       baseConfig: default
+
+resilience4j.circuitbreaker:
+  configs:
+    default:
+      slidingWindowSize: 100
+      permittedNumberOfCallsInHalfOpenState: 10
+      waitDurationInOpenState: 10000
+      failureRateThreshold: 60
+      eventConsumerBufferSize: 10
+      registerHealthIndicator: true
+  instances:
+    cb-pokemon:
+      baseConfig: default
+      recordExceptions: org.simor.adapter.client.PokemonRestClientException
+    cb-translation:
+      baseConfig: default
+      recordExceptions: org.simor.adapter.client.TranslationRestClientException

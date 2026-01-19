@@ -1,6 +1,7 @@
 package org.simor.adapter.client
 
-
+import io.github.resilience4j.circuitbreaker.CallNotPermittedException
+import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.test.context.SpringBootTest
@@ -18,6 +19,8 @@ import spock.lang.Specification
 @SpringBootTest
 class TranslationRestClientTest extends Specification {
 
+    private static final CB_TRANSLATION = 'cb-translation'
+
     @Shared
     private static WireMockContainer MOCK_SERVER = new WireMockContainer("wiremock/wiremock")
             .withMappingFromResource("translation_success.json")
@@ -32,6 +35,9 @@ class TranslationRestClientTest extends Specification {
     @Qualifier("shakespeareTranslation")
     private TranslationRestClient translationRestClient
 
+    @Autowired
+    protected CircuitBreakerRegistry circuitBreakerRegistry
+
     @DynamicPropertySource
     static void dynamicProperties(DynamicPropertyRegistry registry) {
         registry.add("rest-client.shakespeare-translation.base-url", () -> {
@@ -44,6 +50,14 @@ class TranslationRestClientTest extends Specification {
 
     def setupSpec() {
         MOCK_SERVER.start()
+    }
+
+    def setup(){
+        circuitBreakerRegistry.circuitBreaker(CB_TRANSLATION).transitionToClosedState()
+    }
+
+    def cleanup(){
+        circuitBreakerRegistry.circuitBreaker(CB_TRANSLATION).transitionToClosedState()
     }
 
     def cleanupSpec() {
@@ -96,5 +110,14 @@ class TranslationRestClientTest extends Specification {
     def "Given a description it is translated after retry for 5xx error"() {
         expect:
         translationRestClient.getTranslation("my fancy error description") == "Mine plaited error description"
+    }
+
+    def "Given open circuit breaker it throws exception"() {
+        given:
+        circuitBreakerRegistry.circuitBreaker(CB_TRANSLATION).transitionToOpenState()
+        when:
+        translationRestClient.getTranslation("my fancy error description")
+        then:
+        thrown CallNotPermittedException
     }
 }

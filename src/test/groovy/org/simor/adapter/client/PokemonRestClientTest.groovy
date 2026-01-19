@@ -1,6 +1,7 @@
 package org.simor.adapter.client
 
-
+import io.github.resilience4j.circuitbreaker.CallNotPermittedException
+import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry
 import org.simor.entity.FlavorLanguage
 import org.simor.entity.FlavorTextEntry
 import org.simor.entity.FlavorVersion
@@ -22,6 +23,8 @@ import spock.lang.Specification
 @SpringBootTest
 class PokemonRestClientTest extends Specification {
 
+    private static final CB_POKEMON = 'cb-pokemon'
+
     @Shared
     private static WireMockContainer MOCK_SERVER = new WireMockContainer("wiremock/wiremock")
             .withMappingFromResource("pokemon_success_mewtwo.json")
@@ -33,6 +36,9 @@ class PokemonRestClientTest extends Specification {
     @Autowired
     private PokemonRestClient pokemonRestClient
 
+    @Autowired
+    protected CircuitBreakerRegistry circuitBreakerRegistry
+
     @DynamicPropertySource
     static void dynamicProperties(DynamicPropertyRegistry registry) {
         registry.add("rest-client.pokemon.base-url", () -> {
@@ -42,6 +48,13 @@ class PokemonRestClientTest extends Specification {
 
     def setupSpec() {
         MOCK_SERVER.start()
+    }
+
+    def setup() {
+        circuitBreakerRegistry.circuitBreaker(CB_POKEMON).transitionToClosedState()
+    }
+    def cleanup(){
+        circuitBreakerRegistry.circuitBreaker(CB_POKEMON).transitionToClosedState()
     }
 
     def cleanupSpec() {
@@ -120,4 +133,12 @@ class PokemonRestClientTest extends Specification {
 
     }
 
+    def "Given open circuit breaker it throws exception"() {
+        given:
+        circuitBreakerRegistry.circuitBreaker(CB_POKEMON).transitionToOpenState()
+        when:
+        pokemonRestClient.getPokemonSpec("mewtwo")
+        then:
+        thrown CallNotPermittedException
+    }
 }
