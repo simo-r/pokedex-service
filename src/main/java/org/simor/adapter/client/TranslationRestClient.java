@@ -42,7 +42,7 @@ public class TranslationRestClient implements TranslationClient {
     @CircuitBreaker(name = "cb-translation")
     @Cacheable("cache-translation")
     public String getTranslation(String description) {
-        log.info("Outbound HTTP Request. description {}", description);
+        log.debug("Outbound HTTP Request. description {}", description);
         try {
             MultiValueMap<String, String> formEncodedBody = new LinkedMultiValueMap<>();
             formEncodedBody.add("text", description);
@@ -51,7 +51,7 @@ public class TranslationRestClient implements TranslationClient {
                     .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                     .retrieve()
                     .body(TranslatedDescription.class);
-            log.info("Outbound HTTP Response. Response {}", translatedDescription);
+            log.debug("Outbound HTTP Response. Response {}", translatedDescription);
             return Optional.ofNullable(translatedDescription)
                     .map(TranslatedDescription::contents)
                     .map(TranslatedDescription.Content::translated)
@@ -59,10 +59,10 @@ public class TranslationRestClient implements TranslationClient {
                             new TranslationRestClientException(HttpStatus.BAD_GATEWAY, "Unable to map response"));
         } catch (RestClientResponseException ex) {
             // exception thrown by ResponseSpec when status code >= 400
-            log.info("Exception occurred.", ex);
+            log.error("Exception occurred.", ex);
             throw new TranslationRestClientException(ex.getStatusCode(), ex.getMessage());
         } catch (RestClientException ex) {
-            log.info("Exception occurred.", ex);
+            log.error("Exception occurred.", ex);
             throw new TranslationRestClientException(HttpStatus.BAD_GATEWAY, "Unexpected error occurred");
         }
     }

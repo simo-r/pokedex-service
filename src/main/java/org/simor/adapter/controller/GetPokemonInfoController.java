@@ -22,20 +22,20 @@ public class GetPokemonInfoController {
 
     @GetMapping(value = GET_POKEMON_INFO_ENDPOINT, produces = MediaType.APPLICATION_JSON_VALUE)
     public GetPokemonInfoResponse getPokemonInfo(@PathVariable String pokemonName) {
-        log.info("Inbound HTTP Request. Path: {} pokemonName {}", GET_POKEMON_INFO_ENDPOINT, pokemonName);
+        log.debug("Inbound HTTP Request. Path: {} pokemonName {}", GET_POKEMON_INFO_ENDPOINT, pokemonName);
         Pokemon pokemon = getPokemonInfoUseCase.execute(pokemonName);
         GetPokemonInfoResponse getPokemonInfoResponse = new GetPokemonInfoResponse(pokemon.name(), pokemon.description(), pokemon.habitat(), pokemon.isLegendary());
-        log.info("Inbound HTTP Response. Path: {} pokemonName {} Response {}",
+        log.debug("Inbound HTTP Response. Path: {} pokemonName {} Response {}",
                 GET_POKEMON_INFO_ENDPOINT, pokemonName, getPokemonInfoResponse);
         return getPokemonInfoResponse;
     }
 
     @GetMapping(value = GET_TRANSLATED_POKEMON_INFO_ENDPOINT, produces = MediaType.APPLICATION_JSON_VALUE)
     public GetPokemonInfoResponse getTranslatedPokemonInfo(@PathVariable String pokemonName) {
-        log.info("Inbound HTTP Request. Path: {} pokemonName {}", GET_POKEMON_INFO_ENDPOINT, pokemonName);
+        log.debug("Inbound HTTP Request. Path: {} pokemonName {}", GET_POKEMON_INFO_ENDPOINT, pokemonName);
         Pokemon pokemon = getTranslatedPokemonInfoUseCase.execute(pokemonName);
         GetPokemonInfoResponse getPokemonInfoResponse = new GetPokemonInfoResponse(pokemon.name(), pokemon.description(), pokemon.habitat(), pokemon.isLegendary());
-        log.info("Inbound HTTP Response. Path: {} pokemonName {} Response {}",
+        log.debug("Inbound HTTP Response. Path: {} pokemonName {} Response {}",
                 GET_POKEMON_INFO_ENDPOINT, pokemonName, getPokemonInfoResponse);
         return getPokemonInfoResponse;
     }

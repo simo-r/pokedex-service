@@ -41,24 +41,24 @@ public class PokemonRestClient implements PokemonClient {
     @CircuitBreaker(name = "cb-pokemon")
     @Cacheable("cache-pokemon")
     public Pokemon getPokemonSpecies(String pokemonName) {
-        log.info("Outbound HTTP Request. pokemonName {}", pokemonName);
+        log.debug("Outbound HTTP Request. pokemonName {}", pokemonName);
         try {
             PokemonRestClientResponse pokemonRestClientResponse = pokemonRestClient.get()
                     .uri(pokemonName)
                     .accept(MediaType.APPLICATION_JSON)
                     .retrieve()
                     .body(PokemonRestClientResponse.class);
-            log.info("Outbound HTTP Response. Response {}", pokemonRestClientResponse);
+            log.debug("Outbound HTTP Response. Response {}", pokemonRestClientResponse);
             if (pokemonRestClientResponse == null) {
                 throw new PokemonRestClientException(HttpStatus.BAD_GATEWAY, "Unexpected response ");
             }
             return pokemonRestClientResponse.toDomain();
         } catch (RestClientResponseException ex) {
-            log.info("Exception occurred.", ex);
+            log.error("Exception occurred.", ex);
             // exception thrown by ResponseSpec when status code >= 400
             throw new PokemonRestClientException(ex.getStatusCode(), ex.getMessage());
         } catch (RestClientException ex) {
-            log.info("Exception occurred.", ex);
+            log.error("Exception occurred.", ex);
             throw new PokemonRestClientException(HttpStatus.BAD_GATEWAY, "Unexpected error occurred");
         }
     }

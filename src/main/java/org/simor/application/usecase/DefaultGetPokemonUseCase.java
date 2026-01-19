@@ -10,10 +10,10 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class DefaultGetPokemonUseCase implements GetPokemonInfoUseCase {
 
-    private final PokemonClient pokemonRestClient;
+    private final PokemonClient pokemonClient;
 
     @Override
     public Pokemon execute(String pokemonName) {
-        return pokemonRestClient.getPokemonSpecies(pokemonName);
+        return pokemonClient.getPokemonSpecies(pokemonName);
     }
 }
