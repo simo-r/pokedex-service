@@ -35,6 +35,12 @@ Run tests
 
 ### Docker
 
+#### Docker compose
+
+```shell
+docker-compose up -d
+```
+
 #### Build
 
 ```shell
