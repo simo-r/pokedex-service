@@ -9,18 +9,21 @@ Fun Pokedex in the form of a REST API, it returns:
 - Java 21+
 - Docker 
 
-### Build & Test
+### Build
 
 Test requires docker environment as the service uses `testcontainer` framework to boot instances
 Run complete build and test
 
 > [!NOTE]
 > Docker daemon must be running before executing tests
+> Build will run tests
 
 ```shell
 ./gradlew build
 ```
-Run tests
+
+### Test
+
 ```shell
 ./gradlew test
 ```
@@ -84,10 +87,9 @@ curl --request GET \
 - Observability: metrics and logs
 - Data model validation: add optional/required fields, nullable
 - Improve exception handling: rest client exceptions, business logic exceptions, Spring rest controllers exception
-- Decoupling adapter models and internal DTOs
 - Clients should be abstracted from the actual implementation of using Spring Rest Client
 - Integration tests stub could be improved by decoupling and make use case more explicit
-- Cache our API responses 
+- Cache our API responses
 
 ### Business
 - Multiple locale support
@@ -149,5 +151,4 @@ curl --request GET \
 │ External Service │       │ External Service              │
 └──────────────────┘       └────────────────────────────────┘
 ```
-
 ---
