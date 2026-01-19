@@ -77,7 +77,7 @@ curl --request GET \
 - Authentication & Authorization
 - Logging 
 - Data model validation: add optional/required fields, nullable
-- Improve exception handling: rest client exceptions, business logic exceptions
+- Improve exception handling: rest client exceptions, business logic exceptions, Spring rest controllers exception
 - Decoupling adapter models and internal DTOs
 - Cache external dependencies response
 - Clients should be abstracted from the actual implementation of using Spring Rest Client

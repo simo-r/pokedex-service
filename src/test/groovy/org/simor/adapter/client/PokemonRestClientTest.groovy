@@ -1,36 +1,51 @@
 package org.simor.adapter.client
 
+
 import org.simor.entity.FlavorLanguage
 import org.simor.entity.FlavorTextEntry
 import org.simor.entity.FlavorVersion
 import org.simor.entity.Habitat
 import org.simor.entity.PokemonSpec
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.HttpStatus
+import org.springframework.test.context.DynamicPropertyRegistry
+import org.springframework.test.context.DynamicPropertySource
 import org.testcontainers.spock.Testcontainers
 import org.wiremock.integrations.testcontainers.WireMockContainer
 import spock.lang.Shared
 import spock.lang.Specification
 
-
+// SpringBootTest is required to bootstrap resilience4j autoconfiguration and annotation
+// Scenarios are mocked based on the input pokemon name
 @Testcontainers
+@SpringBootTest
 class PokemonRestClientTest extends Specification {
 
     @Shared
-    WireMockContainer mockServer = new WireMockContainer("wiremock/wiremock")
+    private static WireMockContainer MOCK_SERVER = new WireMockContainer("wiremock/wiremock")
             .withMappingFromResource("pokemon_success_mewtwo.json")
             .withMappingFromResource("pokemon_not_found.json")
             .withMappingFromResource("pokemon_internal_server_error.json")
             .withMappingFromResource("pokemon_malformed_response.json")
-    @Shared
+            .withMappingFromResource("pokemon_success_retry_timeout_scenario.json")
+            .withMappingFromResource("pokemon_success_retry_5xx_scenario.json")
+    @Autowired
     private PokemonRestClient pokemonRestClient
 
+    @DynamicPropertySource
+    static void dynamicProperties(DynamicPropertyRegistry registry) {
+        registry.add("rest-client.pokemon.base-url", () -> {
+            MOCK_SERVER.getBaseUrl()
+        })
+    }
+
     def setupSpec() {
-        mockServer.start()
-        pokemonRestClient = new PokemonRestClient(mockServer.getBaseUrl())
+        MOCK_SERVER.start()
     }
 
     def cleanupSpec() {
-        mockServer.stop()
+        MOCK_SERVER.stop()
     }
 
     def "Given existing pokemon it returns its species"() {
@@ -72,6 +87,37 @@ class PokemonRestClientTest extends Specification {
         then:
         def e = thrown PokemonRestClientException
         e.getStatusCode() == HttpStatus.BAD_GATEWAY
+    }
+
+    def "Given existing pokemon it returns its species after retry for timeout"() {
+        when:
+        def pokemonSpec = pokemonRestClient.getPokemonSpec("delay")
+        then:
+        pokemonSpec == new PokemonSpec(
+                "mewtwo",
+                [new FlavorTextEntry("Red sample description",
+                        new FlavorLanguage("en"),
+                        new FlavorVersion("red")),
+                 new FlavorTextEntry("Blue sample description",
+                         new FlavorLanguage("en"),
+                         new FlavorVersion("blue"))
+                ], new Habitat("rare"), true)
+    }
+
+    def "Given existing pokemon it returns its species after retry for 5xx error"() {
+        when:
+        def pokemonSpec = pokemonRestClient.getPokemonSpec("errorRetry")
+        then:
+        pokemonSpec == new PokemonSpec(
+                "mewtwo",
+                [new FlavorTextEntry("Red sample description",
+                        new FlavorLanguage("en"),
+                        new FlavorVersion("red")),
+                 new FlavorTextEntry("Blue sample description",
+                         new FlavorLanguage("en"),
+                         new FlavorVersion("blue"))
+                ], new Habitat("rare"), true)
+
     }
 
 }

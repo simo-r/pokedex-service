@@ -34,6 +34,9 @@ application {
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation "io.github.resilience4j:resilience4j-spring-boot3:2.3.0"
+    implementation "org.springframework.boot:spring-boot-starter-actuator"
+    implementation "org.springframework.boot:spring-boot-starter-aop"
 
     testImplementation platform('org.apache.groovy:groovy-bom:4.0.22')
     testImplementation 'org.apache.groovy:groovy'

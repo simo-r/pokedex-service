@@ -7,3 +7,13 @@ rest-client:
   yoda-translation:
     base-url: https://api.funtranslations.com
     path: translate/yoda.json
+
+resilience4j.retry:
+  configs:
+    default:
+      maxAttempts: 3
+      waitDuration: 100
+      retryExceptionPredicate: org.simor.adapter.client.RestClientRetryPredicate
+  instances:
+    pokemon:
+      baseConfig: default
