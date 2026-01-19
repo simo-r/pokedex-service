@@ -1,18 +1,18 @@
 rest-client:
   pokemon:
     base-url: https://pokeapi.co
-    read-timeout: 300
-    connect-timeout: 300
+    read-timeout: 500
+    connect-timeout: 500
   shakespeare-translation:
     base-url: https://api.funtranslations.com
     path: translate/shakespeare.json
-    read-timeout: 300
-    connect-timeout: 300
+    read-timeout: 1000
+    connect-timeout: 1000
   yoda-translation:
     base-url: https://api.funtranslations.com
     path: translate/yoda.json
-    read-timeout: 300
-    connect-timeout: 300
+    read-timeout: 1000
+    connect-timeout: 1000
 
 resilience4j.retry:
   configs:

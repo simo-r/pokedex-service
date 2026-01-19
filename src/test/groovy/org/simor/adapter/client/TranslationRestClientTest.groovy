@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.HttpStatus
+import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
 import org.testcontainers.spock.Testcontainers
@@ -17,6 +18,7 @@ import spock.lang.Specification
 // Scenarios are mocked based on the input pokemon name
 @Testcontainers
 @SpringBootTest
+@ActiveProfiles("test")
 class TranslationRestClientTest extends Specification {
 
     private static final CB_TRANSLATION = 'cb-translation'

@@ -4,6 +4,7 @@ import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
 import org.springframework.test.web.servlet.MockMvc
@@ -18,6 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @Testcontainers
 @AutoConfigureMockMvc
+@ActiveProfiles("test")
 class TranslatedPokemonInfoIntegrationTest extends Specification {
 
     private static final CB_POKEMON = 'cb-pokemon'

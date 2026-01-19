@@ -1,0 +1,10 @@
+rest-client:
+  pokemon:
+    read-timeout: 300
+    connect-timeout: 300
+  shakespeare-translation:
+    read-timeout: 300
+    connect-timeout: 300
+  yoda-translation:
+    read-timeout: 300
+    connect-timeout: 300
