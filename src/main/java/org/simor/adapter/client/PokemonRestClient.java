@@ -3,7 +3,8 @@ package org.simor.adapter.client;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import org.simor.config.RestClientProperties;
-import org.simor.entity.PokemonSpec;
+import org.simor.entity.domain.Pokemon;
+import org.simor.entity.model.PokemonRestClientResponse;
 import org.springframework.boot.http.client.ClientHttpRequestFactoryBuilder;
 import org.springframework.boot.http.client.ClientHttpRequestFactorySettings;
 import org.springframework.cache.annotation.Cacheable;
@@ -24,7 +25,6 @@ public class PokemonRestClient {
 
     PokemonRestClient(RestClientProperties.RestClient pokemonConfig) {
         ClientHttpRequestFactorySettings requestFactorySettings = ClientHttpRequestFactorySettings.defaults()
-                //TODO Make them configurable
                 .withConnectTimeout(Duration.ofMillis(pokemonConfig.getConnectTimeout()))
                 .withReadTimeout(Duration.ofMillis(pokemonConfig.getReadTimeout()));
         JdkClientHttpRequestFactory requestFactory = ClientHttpRequestFactoryBuilder.jdk().build(requestFactorySettings);
@@ -37,13 +37,17 @@ public class PokemonRestClient {
     @Retry(name = "retry-pokemon")
     @CircuitBreaker(name = "cb-pokemon")
     @Cacheable("cache-pokemon")
-    public PokemonSpec getPokemonSpec(String pokemonName) {
+    public Pokemon getPokemonSpec(String pokemonName) {
         try {
-            return pokemonRestClient.get()
+            PokemonRestClientResponse pokemonRestClientResponse = pokemonRestClient.get()
                     .uri(pokemonName)
                     .accept(MediaType.APPLICATION_JSON)
                     .retrieve()
-                    .body(PokemonSpec.class);
+                    .body(PokemonRestClientResponse.class);
+            if (pokemonRestClientResponse == null) {
+                throw new PokemonRestClientException(HttpStatus.BAD_GATEWAY, "Unexpected response ");
+            }
+            return pokemonRestClientResponse.toDomain();
         } catch (RestClientResponseException ex) {
             // exception thrown by ResponseSpec when status code >= 400
             throw new PokemonRestClientException(ex.getStatusCode(), ex.getMessage());

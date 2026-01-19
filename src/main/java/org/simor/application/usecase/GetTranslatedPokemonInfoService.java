@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.simor.adapter.client.TranslationClient;
 import org.simor.adapter.client.TranslationRestClientException;
 import org.simor.application.strategy.TranslationStrategy;
-import org.simor.entity.PokemonInfoResponse;
+import org.simor.entity.domain.Pokemon;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -18,8 +18,8 @@ public class GetTranslatedPokemonInfoService implements GetTranslatedPokemonInfo
     private final Map<TranslationStrategy, TranslationClient> strategyTranslationClientMap;
 
     @Override
-    public PokemonInfoResponse execute(String pokemonName) {
-        PokemonInfoResponse pokemonInfoResponse = getPokemonInfoUseCase.execute(pokemonName);
+    public Pokemon execute(String pokemonName) {
+        Pokemon pokemonInfoResponse = getPokemonInfoUseCase.execute(pokemonName);
         if (!StringUtils.hasText(pokemonInfoResponse.description())) {
             return pokemonInfoResponse;
         }
@@ -32,7 +32,7 @@ public class GetTranslatedPokemonInfoService implements GetTranslatedPokemonInfo
                 .map(entry ->
                         getTranslation(entry.getValue(), pokemonInfoResponse))
                 .orElse(pokemonInfoResponse.description());
-        return new PokemonInfoResponse(
+        return new Pokemon(
                 pokemonInfoResponse.name(),
                 translatedDescription,
                 pokemonInfoResponse.habitat(),
@@ -40,11 +40,11 @@ public class GetTranslatedPokemonInfoService implements GetTranslatedPokemonInfo
     }
 
     private static String getTranslation(TranslationClient translationClient,
-                                         PokemonInfoResponse pokemonInfoResponse) {
+                                         Pokemon pokemon) {
         try {
-            return translationClient.getTranslation(pokemonInfoResponse.description());
+            return translationClient.getTranslation(pokemon.description());
         } catch (TranslationRestClientException e) {
-            return pokemonInfoResponse.description();
+            return pokemon.description();
         }
     }
 }

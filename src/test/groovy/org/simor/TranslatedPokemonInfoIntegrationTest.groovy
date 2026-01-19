@@ -18,7 +18,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @Testcontainers
 @AutoConfigureMockMvc
-//TODO Add API error integration test: not found, bad request
 class TranslatedPokemonInfoIntegrationTest extends Specification {
 
     private static final CB_POKEMON = 'cb-pokemon'

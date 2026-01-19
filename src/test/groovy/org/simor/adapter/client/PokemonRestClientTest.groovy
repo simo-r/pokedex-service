@@ -2,11 +2,7 @@ package org.simor.adapter.client
 
 import io.github.resilience4j.circuitbreaker.CallNotPermittedException
 import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry
-import org.simor.entity.FlavorLanguage
-import org.simor.entity.FlavorTextEntry
-import org.simor.entity.FlavorVersion
-import org.simor.entity.Habitat
-import org.simor.entity.PokemonSpec
+import org.simor.entity.domain.Pokemon
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.HttpStatus
@@ -54,7 +50,8 @@ class PokemonRestClientTest extends Specification {
     def setup() {
         circuitBreakerRegistry.circuitBreaker(CB_POKEMON).transitionToClosedState()
     }
-    def cleanup(){
+
+    def cleanup() {
         circuitBreakerRegistry.circuitBreaker(CB_POKEMON).transitionToClosedState()
     }
 
@@ -66,15 +63,7 @@ class PokemonRestClientTest extends Specification {
         when:
         def pokemonSpec = pokemonRestClient.getPokemonSpec("mewtwo")
         then:
-        pokemonSpec == new PokemonSpec(
-                "mewtwo",
-                [new FlavorTextEntry("Red sample description",
-                        new FlavorLanguage("en"),
-                        new FlavorVersion("red")),
-                 new FlavorTextEntry("Blue sample description",
-                         new FlavorLanguage("en"),
-                         new FlavorVersion("blue"))
-                ], new Habitat("rare"), true)
+        pokemonSpec == new Pokemon("mewtwo", "Red sample description", "rare", true)
 
     }
 
@@ -107,30 +96,14 @@ class PokemonRestClientTest extends Specification {
         when:
         def pokemonSpec = pokemonRestClient.getPokemonSpec("delay")
         then:
-        pokemonSpec == new PokemonSpec(
-                "mewtwo",
-                [new FlavorTextEntry("Red sample description",
-                        new FlavorLanguage("en"),
-                        new FlavorVersion("red")),
-                 new FlavorTextEntry("Blue sample description",
-                         new FlavorLanguage("en"),
-                         new FlavorVersion("blue"))
-                ], new Habitat("rare"), true)
+        pokemonSpec == new Pokemon("mewtwo", "Red sample description", "rare", true)
     }
 
     def "Given existing pokemon it returns its species after retry for 5xx error"() {
         when:
         def pokemonSpec = pokemonRestClient.getPokemonSpec("errorRetry")
         then:
-        pokemonSpec == new PokemonSpec(
-                "mewtwo",
-                [new FlavorTextEntry("Red sample description",
-                        new FlavorLanguage("en"),
-                        new FlavorVersion("red")),
-                 new FlavorTextEntry("Blue sample description",
-                         new FlavorLanguage("en"),
-                         new FlavorVersion("blue"))
-                ], new Habitat("rare"), true)
+        pokemonSpec == new Pokemon("mewtwo", "Red sample description", "rare", true)
 
     }
 
@@ -149,15 +122,7 @@ class PokemonRestClientTest extends Specification {
         when:
         def cachedResponse = pokemonRestClient.getPokemonSpec("cache")
         then:
-        cachedResponse == new PokemonSpec(
-                "mewtwo",
-                [new FlavorTextEntry("Red sample description",
-                        new FlavorLanguage("en"),
-                        new FlavorVersion("red")),
-                 new FlavorTextEntry("Blue sample description",
-                         new FlavorLanguage("en"),
-                         new FlavorVersion("blue"))
-                ], new Habitat("rare"), true)
+        cachedResponse == new Pokemon("mewtwo", "Red sample description", "rare", true)
 
     }
 }

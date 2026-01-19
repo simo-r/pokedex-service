@@ -1,7 +1,7 @@
 package org.simor.adapter.controller
 
 import org.simor.adapter.client.PokemonRestClientException
-import org.simor.entity.ErrorResponse
+import org.simor.entity.model.GetPokemonInfoErrorResponse
 import org.springframework.http.HttpStatus
 import spock.lang.Shared
 import spock.lang.Specification
@@ -22,7 +22,7 @@ class GlobalExceptionHandlerTest extends Specification {
         def responseEntity = handler.handlePokemonRestClientException(exception)
         then:
         responseEntity.getStatusCode() == HttpStatus.NOT_FOUND
-        responseEntity.getBody() == new ErrorResponse("Pokemon not found")
+        responseEntity.getBody() == new GetPokemonInfoErrorResponse("Pokemon not found")
     }
 
     def "Given Pokemon 5xx exception it returns an error with status bad gateway"() {
@@ -32,7 +32,7 @@ class GlobalExceptionHandlerTest extends Specification {
         def responseEntity = handler.handlePokemonRestClientException(exception)
         then:
         responseEntity.getStatusCode() == HttpStatus.BAD_GATEWAY
-        responseEntity.getBody() == new ErrorResponse("Unable to process request")
+        responseEntity.getBody() == new GetPokemonInfoErrorResponse("Unable to process request")
     }
 
     def "Given Pokemon 4xx exception it returns an error with status internal server error"() {
@@ -42,6 +42,6 @@ class GlobalExceptionHandlerTest extends Specification {
         def responseEntity = handler.handlePokemonRestClientException(exception)
         then:
         responseEntity.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR
-        responseEntity.getBody() == new ErrorResponse("Unexpected error fetching Pokemon information")
+        responseEntity.getBody() == new GetPokemonInfoErrorResponse("Unexpected error fetching Pokemon information")
     }
 }

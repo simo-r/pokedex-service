@@ -3,7 +3,8 @@ package org.simor.application.usecase
 import org.simor.adapter.client.TranslationClient
 import org.simor.adapter.client.TranslationRestClientException
 import org.simor.application.strategy.TranslationStrategy
-import org.simor.entity.PokemonInfoResponse
+import org.simor.entity.domain.Pokemon
+import org.simor.entity.model.GetPokemonInfoResponse
 import org.springframework.http.HttpStatus
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -26,7 +27,7 @@ class GetTranslatedPokemonInfoServiceTest extends Specification {
         def habitat = "cave"
         def isLegendary = false
         def description = "Red sample description"
-        def pokemonInfo = new PokemonInfoResponse(pokemonName, description, habitat, isLegendary)
+        def pokemonInfo = new Pokemon(pokemonName, description, habitat, isLegendary)
         def mockStrategy = Mock(TranslationStrategy)
         def mockTranslationClient = Mock(TranslationClient)
         def expectedTranslatedDescription = "A translated description"
@@ -38,7 +39,7 @@ class GetTranslatedPokemonInfoServiceTest extends Specification {
         1 * strategyTranslationClientMap.entrySet() >> Set.of(Map.entry(mockStrategy, mockTranslationClient))
         1 * mockStrategy.isApplicable(habitat, isLegendary) >> true
         1 * mockTranslationClient.getTranslation(description) >> expectedTranslatedDescription
-        translatedPokemonInfo == new PokemonInfoResponse(pokemonName, expectedTranslatedDescription, habitat, isLegendary)
+        translatedPokemonInfo == new Pokemon(pokemonName, expectedTranslatedDescription, habitat, isLegendary)
     }
 
     @Unroll
@@ -47,7 +48,7 @@ class GetTranslatedPokemonInfoServiceTest extends Specification {
         def pokemonName = "mewtwo"
         def habitat = "cave"
         def isLegendary = false
-        def pokemonInfo = new PokemonInfoResponse(pokemonName, description, habitat, isLegendary)
+        def pokemonInfo = new Pokemon(pokemonName, description, habitat, isLegendary)
         def mockStrategy = Mock(TranslationStrategy)
         def mockTranslationClient = Mock(TranslationClient)
 
@@ -58,7 +59,7 @@ class GetTranslatedPokemonInfoServiceTest extends Specification {
         0 * strategyTranslationClientMap.entrySet()
         0 * mockStrategy.isApplicable(_, _)
         0 * mockTranslationClient.getTranslation(_)
-        translatedPokemonInfo == new PokemonInfoResponse(pokemonName, description, habitat, isLegendary)
+        translatedPokemonInfo == new Pokemon(pokemonName, description, habitat, isLegendary)
         where:
         description << [null, "", "  "]
     }
@@ -69,7 +70,7 @@ class GetTranslatedPokemonInfoServiceTest extends Specification {
         def habitat = "cave"
         def isLegendary = false
         def description = "Red sample description"
-        def pokemonInfo = new PokemonInfoResponse(pokemonName, description, habitat, isLegendary)
+        def pokemonInfo = new Pokemon(pokemonName, description, habitat, isLegendary)
         def mockStrategy = Mock(TranslationStrategy)
         def mockTranslationClient = Mock(TranslationClient)
 
@@ -80,7 +81,7 @@ class GetTranslatedPokemonInfoServiceTest extends Specification {
         1 * strategyTranslationClientMap.entrySet() >> Collections.emptySet()
         0 * mockStrategy.isApplicable(_, _)
         0 * mockTranslationClient.getTranslation(_)
-        translatedPokemonInfo == new PokemonInfoResponse(pokemonName, description, habitat, isLegendary)
+        translatedPokemonInfo == new Pokemon(pokemonName, description, habitat, isLegendary)
     }
 
     def "Given pokemon name but no applicable translation strategy it returns pokemon info"() {
@@ -89,7 +90,7 @@ class GetTranslatedPokemonInfoServiceTest extends Specification {
         def habitat = "cave"
         def isLegendary = false
         def description = "Red sample description"
-        def pokemonInfo = new PokemonInfoResponse(pokemonName, description, habitat, isLegendary)
+        def pokemonInfo = new Pokemon(pokemonName, description, habitat, isLegendary)
         def mockStrategy = Mock(TranslationStrategy)
         def mockTranslationClient = Mock(TranslationClient)
 
@@ -100,7 +101,7 @@ class GetTranslatedPokemonInfoServiceTest extends Specification {
         1 * strategyTranslationClientMap.entrySet() >> Set.of(Map.entry(mockStrategy, mockTranslationClient))
         1 * mockStrategy.isApplicable(habitat, isLegendary) >> false
         0 * mockTranslationClient.getTranslation(_)
-        translatedPokemonInfo == new PokemonInfoResponse(pokemonName, description, habitat, isLegendary)
+        translatedPokemonInfo == new Pokemon(pokemonName, description, habitat, isLegendary)
     }
 
     def "Given pokemon name but exception during translation it returns pokemon info"() {
@@ -109,7 +110,7 @@ class GetTranslatedPokemonInfoServiceTest extends Specification {
         def habitat = "cave"
         def isLegendary = false
         def description = "Red sample description"
-        def pokemonInfo = new PokemonInfoResponse(pokemonName, description, habitat, isLegendary)
+        def pokemonInfo = new Pokemon(pokemonName, description, habitat, isLegendary)
         def mockStrategy = Mock(TranslationStrategy)
         def mockTranslationClient = Mock(TranslationClient)
 
@@ -121,6 +122,6 @@ class GetTranslatedPokemonInfoServiceTest extends Specification {
         1 * mockStrategy.isApplicable(habitat, isLegendary) >> true
         1 * mockTranslationClient.getTranslation(description) >>
                 { throw new TranslationRestClientException(HttpStatus.BAD_GATEWAY, "Error") }
-        translatedPokemonInfo == new PokemonInfoResponse(pokemonName, description, habitat, isLegendary)
+        translatedPokemonInfo == new Pokemon(pokemonName, description, habitat, isLegendary)
     }
 }

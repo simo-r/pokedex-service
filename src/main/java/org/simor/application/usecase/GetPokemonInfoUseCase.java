@@ -1,8 +1,8 @@
 package org.simor.application.usecase;
 
-import org.simor.entity.PokemonInfoResponse;
+import org.simor.entity.domain.Pokemon;
 
 public interface GetPokemonInfoUseCase {
 
-    PokemonInfoResponse execute(String pokemonName);
+    Pokemon execute(String pokemonName);
 }

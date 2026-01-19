@@ -3,8 +3,7 @@ package org.simor.adapter.client;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import org.simor.config.RestClientProperties;
-import org.simor.entity.TranslatedContent;
-import org.simor.entity.TranslatedDescription;
+import org.simor.entity.model.TranslatedDescription;
 import org.springframework.boot.http.client.ClientHttpRequestFactoryBuilder;
 import org.springframework.boot.http.client.ClientHttpRequestFactorySettings;
 import org.springframework.cache.annotation.Cacheable;
@@ -26,7 +25,6 @@ public class TranslationRestClient implements TranslationClient {
 
     public TranslationRestClient(RestClientProperties.RestClient translationConfig) {
         ClientHttpRequestFactorySettings requestFactorySettings = ClientHttpRequestFactorySettings.defaults()
-                //TODO Make them configurable
                 .withConnectTimeout(Duration.ofMillis(translationConfig.getConnectTimeout()))
                 .withReadTimeout(Duration.ofMillis(translationConfig.getReadTimeout()));
         JdkClientHttpRequestFactory requestFactory = ClientHttpRequestFactoryBuilder.jdk().build(requestFactorySettings);
@@ -52,11 +50,9 @@ public class TranslationRestClient implements TranslationClient {
                     .body(TranslatedDescription.class);
             return Optional.ofNullable(translatedDescription)
                     .map(TranslatedDescription::contents)
-                    .map(TranslatedContent::translated)
-                    .orElseThrow(
-                            //TODO Is bad gateway correct when there isnt a translation?
-                            () -> new TranslationRestClientException(HttpStatus.BAD_GATEWAY,
-                                    "Unable to map response"));
+                    .map(TranslatedDescription.Content::translated)
+                    .orElseThrow(() ->
+                            new TranslationRestClientException(HttpStatus.BAD_GATEWAY, "Unable to map response"));
         } catch (RestClientResponseException ex) {
             // exception thrown by ResponseSpec when status code >= 400
             throw new TranslationRestClientException(ex.getStatusCode(), ex.getMessage());
