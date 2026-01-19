@@ -3,40 +3,34 @@ package org.simor.application.usecase;
 import lombok.RequiredArgsConstructor;
 import org.simor.adapter.client.TranslationClient;
 import org.simor.adapter.client.TranslationRestClientException;
-import org.simor.application.strategy.TranslationStrategy;
+import org.simor.application.strategy.TranslationStrategyRegistry;
 import org.simor.entity.domain.Pokemon;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-
-import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
 public class DefaultGetTranslatedPokemonInfoUseCase implements GetTranslatedPokemonInfoUseCase {
 
     private final GetPokemonInfoUseCase getPokemonInfoUseCase;
-    private final Map<TranslationStrategy, TranslationClient> strategyTranslationClientMap;
+    private final TranslationStrategyRegistry translationStrategyRegistry;
 
     @Override
     public Pokemon execute(String pokemonName) {
-        Pokemon pokemonInfoResponse = getPokemonInfoUseCase.execute(pokemonName);
-        if (!StringUtils.hasText(pokemonInfoResponse.description())) {
-            return pokemonInfoResponse;
+        Pokemon pokemon = getPokemonInfoUseCase.execute(pokemonName);
+        if (!StringUtils.hasText(pokemon.description())) {
+            return pokemon;
         }
-        String translatedDescription = strategyTranslationClientMap
-                .entrySet()
-                .stream()
-                .filter(entry ->
-                        entry.getKey().isApplicable(pokemonInfoResponse.habitat(), pokemonInfoResponse.isLegendary()))
-                .findFirst()
-                .map(entry ->
-                        getTranslation(entry.getValue(), pokemonInfoResponse))
-                .orElse(pokemonInfoResponse.description());
+
+        String translatedDescription = translationStrategyRegistry.get(pokemon.habitat(), pokemon.isLegendary())
+                .map(translationClient -> getTranslation(translationClient, pokemon))
+                .orElse(pokemon.description());
+
         return new Pokemon(
-                pokemonInfoResponse.name(),
+                pokemon.name(),
                 translatedDescription,
-                pokemonInfoResponse.habitat(),
-                pokemonInfoResponse.isLegendary());
+                pokemon.habitat(),
+                pokemon.isLegendary());
     }
 
     private static String getTranslation(TranslationClient translationClient,

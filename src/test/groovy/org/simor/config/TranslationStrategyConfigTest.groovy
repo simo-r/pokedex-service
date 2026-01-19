@@ -20,7 +20,7 @@ class TranslationStrategyConfigTest extends Specification {
         def yodaTranslation = new TranslationRestClient(new RestClientProperties.RestClient())
         def shakespeareTranslation = new TranslationRestClient(new RestClientProperties.RestClient())
         when:
-        def strategyMap = config.strategyTranslationClientMap(yodaTranslation, shakespeareTranslation)
+        def strategyMap = config.translationRegistry(yodaTranslation, shakespeareTranslation)
         then:
         Iterator<Map.Entry<TranslationStrategy, TranslationClient>> set = strategyMap.entrySet().iterator()
         def yodaEntry = set.next()
