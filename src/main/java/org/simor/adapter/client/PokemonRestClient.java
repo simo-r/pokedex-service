@@ -6,6 +6,7 @@ import org.simor.config.RestClientProperties;
 import org.simor.entity.PokemonSpec;
 import org.springframework.boot.http.client.ClientHttpRequestFactoryBuilder;
 import org.springframework.boot.http.client.ClientHttpRequestFactorySettings;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.JdkClientHttpRequestFactory;
@@ -35,6 +36,7 @@ public class PokemonRestClient {
 
     @Retry(name = "retry-pokemon")
     @CircuitBreaker(name = "cb-pokemon")
+    @Cacheable("cache-pokemon")
     public PokemonSpec getPokemonSpec(String pokemonName) {
         try {
             return pokemonRestClient.get()

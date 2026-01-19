@@ -7,6 +7,7 @@ import org.simor.entity.TranslatedContent;
 import org.simor.entity.TranslatedDescription;
 import org.springframework.boot.http.client.ClientHttpRequestFactoryBuilder;
 import org.springframework.boot.http.client.ClientHttpRequestFactorySettings;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.JdkClientHttpRequestFactory;
@@ -39,6 +40,7 @@ public class TranslationRestClient implements TranslationClient {
     @Override
     @Retry(name = "retry-translation")
     @CircuitBreaker(name = "cb-translation")
+    @Cacheable("cache-translation")
     public String getTranslation(String description) {
         try {
             MultiValueMap<String, String> formEncodedBody = new LinkedMultiValueMap<>();

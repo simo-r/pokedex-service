@@ -30,6 +30,7 @@ class TranslationRestClientTest extends Specification {
             .withMappingFromResource("translation_malformed_response.json")
             .withMappingFromResource("translation_success_retry_timeout_scenario.json")
             .withMappingFromResource("translation_success_retry_5xx_scenario.json")
+            .withMappingFromResource("translation_success_cache_scenario.json")
 
     @Autowired
     @Qualifier("shakespeareTranslation")
@@ -52,11 +53,11 @@ class TranslationRestClientTest extends Specification {
         MOCK_SERVER.start()
     }
 
-    def setup(){
+    def setup() {
         circuitBreakerRegistry.circuitBreaker(CB_TRANSLATION).transitionToClosedState()
     }
 
-    def cleanup(){
+    def cleanup() {
         circuitBreakerRegistry.circuitBreaker(CB_TRANSLATION).transitionToClosedState()
     }
 
@@ -120,4 +121,12 @@ class TranslationRestClientTest extends Specification {
         then:
         thrown CallNotPermittedException
     }
+
+    def "Given existing description in cache it is returned"() {
+        given:
+        translationRestClient.getTranslation("my cached description")
+        expect:
+        translationRestClient.getTranslation("my cached description") == "Mine cached description"
+    }
+
 }

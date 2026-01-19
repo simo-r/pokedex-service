@@ -1,0 +1,46 @@
+{
+  "mappings": [
+    {
+      "scenarioName": "retry-response-cache-scenario",
+      "requiredScenarioState": "Started",
+      "newScenarioState": "second-request",
+      "request": {
+        "method": "POST",
+        "urlPath": "/translate/shakespeare.json",
+        "bodyPatterns": [
+          {
+            "contains": "my+cached+description"
+          }
+        ]
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"success\": {\n    \"total\": 1\n  },\n  \"contents\": {\n    \"translated\": \"Mine cached description\",\n    \"text\": \"my cached description\",\n    \"translation\": \"shakespeare\"\n  }\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    {
+      "scenarioName": "retry-response-cache-scenario",
+      "requiredScenarioState": "second-request",
+      "request": {
+        "method": "POST",
+        "urlPath": "/translate/shakespeare.json",
+        "bodyPatterns": [
+          {
+            "contains": "my+cached+description"
+          }
+        ]
+      },
+      "response": {
+        "status": 500,
+        "body": "{\n  \"error\": {\n    \"code\": 500,\n    \"message\": \"Internal Server Error\"\n  }\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    }
+  ]
+}
+

@@ -6,6 +6,9 @@ import org.simor.application.strategy.ShakespeareTranslationStrategy;
 import org.simor.application.strategy.TranslationStrategy;
 import org.simor.application.strategy.YodaTranslationStrategy;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -13,6 +16,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Configuration
+@EnableCaching
 public class Config {
 
     @Bean
@@ -52,5 +56,10 @@ public class Config {
         strategyTranslationClientMap.put(new YodaTranslationStrategy(), yodaTranslation);
         strategyTranslationClientMap.put(new ShakespeareTranslationStrategy(), shakespeareTranslation);
         return strategyTranslationClientMap;
+    }
+
+    @Bean
+    CacheManager cacheManager() {
+        return new ConcurrentMapCacheManager();
     }
 }

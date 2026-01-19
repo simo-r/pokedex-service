@@ -33,6 +33,7 @@ class PokemonRestClientTest extends Specification {
             .withMappingFromResource("pokemon_malformed_response.json")
             .withMappingFromResource("pokemon_success_retry_timeout_scenario.json")
             .withMappingFromResource("pokemon_success_retry_5xx_scenario.json")
+            .withMappingFromResource("pokemon_success_cache_scenario.json")
     @Autowired
     private PokemonRestClient pokemonRestClient
 
@@ -140,5 +141,23 @@ class PokemonRestClientTest extends Specification {
         pokemonRestClient.getPokemonSpec("mewtwo")
         then:
         thrown CallNotPermittedException
+    }
+
+    def "Given existing pokemon in cache it returns its species"() {
+        given: 'caches the success response'
+        pokemonRestClient.getPokemonSpec("cache")
+        when:
+        def cachedResponse = pokemonRestClient.getPokemonSpec("cache")
+        then:
+        cachedResponse == new PokemonSpec(
+                "mewtwo",
+                [new FlavorTextEntry("Red sample description",
+                        new FlavorLanguage("en"),
+                        new FlavorVersion("red")),
+                 new FlavorTextEntry("Blue sample description",
+                         new FlavorLanguage("en"),
+                         new FlavorVersion("blue"))
+                ], new Habitat("rare"), true)
+
     }
 }
