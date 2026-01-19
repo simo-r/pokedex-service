@@ -21,8 +21,8 @@ class DefaultGetPokemonUseCaseTest extends Specification {
         when:
         def pokemonInfo = pokemonInfoUseCase.execute(validPokemonName)
         then:
-        1 * repository.getPokemonSpec(validPokemonName) >> validPokemonSpec
-        0 * repository.getPokemonSpec(_)
+        1 * repository.getPokemonSpecies(validPokemonName) >> validPokemonSpec
+        0 * repository.getPokemonSpecies(_)
         pokemonInfo == validPokemonSpec
     }
 }

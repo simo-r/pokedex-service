@@ -21,7 +21,7 @@ import java.time.Duration;
 
 @Component
 @Slf4j
-public class PokemonRestClient {
+public class PokemonRestClient implements PokemonClient {
 
     private final RestClient pokemonRestClient;
 
@@ -36,10 +36,11 @@ public class PokemonRestClient {
                 .build();
     }
 
+    @Override
     @Retry(name = "retry-pokemon")
     @CircuitBreaker(name = "cb-pokemon")
     @Cacheable("cache-pokemon")
-    public Pokemon getPokemonSpec(String pokemonName) {
+    public Pokemon getPokemonSpecies(String pokemonName) {
         log.info("Outbound HTTP Request. pokemonName {}", pokemonName);
         try {
             PokemonRestClientResponse pokemonRestClientResponse = pokemonRestClient.get()

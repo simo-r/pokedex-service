@@ -63,7 +63,7 @@ class PokemonRestClientTest extends Specification {
 
     def "Given existing pokemon it returns its species"() {
         when:
-        def pokemonSpec = pokemonRestClient.getPokemonSpec("mewtwo")
+        def pokemonSpec = pokemonRestClient.getPokemonSpecies("mewtwo")
         then:
         pokemonSpec == new Pokemon("mewtwo", "Red sample description", "rare", true)
 
@@ -71,7 +71,7 @@ class PokemonRestClientTest extends Specification {
 
     def "Given unexisting pokemon it throws a not found exception"() {
         when:
-        pokemonRestClient.getPokemonSpec("notExist")
+        pokemonRestClient.getPokemonSpecies("notExist")
         then:
         def e = thrown PokemonRestClientException
         e.getStatusCode() == HttpStatus.NOT_FOUND
@@ -80,7 +80,7 @@ class PokemonRestClientTest extends Specification {
 
     def "Given server error it throws internal server error exception"() {
         when:
-        pokemonRestClient.getPokemonSpec("error")
+        pokemonRestClient.getPokemonSpecies("error")
         then:
         def e = thrown PokemonRestClientException
         e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR
@@ -88,7 +88,7 @@ class PokemonRestClientTest extends Specification {
 
     def "Given malformed response it throws bad gateway error exception"() {
         when:
-        pokemonRestClient.getPokemonSpec("malformed")
+        pokemonRestClient.getPokemonSpecies("malformed")
         then:
         def e = thrown PokemonRestClientException
         e.getStatusCode() == HttpStatus.BAD_GATEWAY
@@ -96,14 +96,14 @@ class PokemonRestClientTest extends Specification {
 
     def "Given existing pokemon it returns its species after retry for timeout"() {
         when:
-        def pokemonSpec = pokemonRestClient.getPokemonSpec("delay")
+        def pokemonSpec = pokemonRestClient.getPokemonSpecies("delay")
         then:
         pokemonSpec == new Pokemon("mewtwo", "Red sample description", "rare", true)
     }
 
     def "Given existing pokemon it returns its species after retry for 5xx error"() {
         when:
-        def pokemonSpec = pokemonRestClient.getPokemonSpec("errorRetry")
+        def pokemonSpec = pokemonRestClient.getPokemonSpecies("errorRetry")
         then:
         pokemonSpec == new Pokemon("mewtwo", "Red sample description", "rare", true)
 
@@ -113,16 +113,16 @@ class PokemonRestClientTest extends Specification {
         given:
         circuitBreakerRegistry.circuitBreaker(CB_POKEMON).transitionToOpenState()
         when:
-        pokemonRestClient.getPokemonSpec("mewtwo")
+        pokemonRestClient.getPokemonSpecies("mewtwo")
         then:
         thrown CallNotPermittedException
     }
 
     def "Given existing pokemon in cache it returns its species"() {
         given: 'caches the success response'
-        pokemonRestClient.getPokemonSpec("cache")
+        pokemonRestClient.getPokemonSpecies("cache")
         when:
-        def cachedResponse = pokemonRestClient.getPokemonSpec("cache")
+        def cachedResponse = pokemonRestClient.getPokemonSpecies("cache")
         then:
         cachedResponse == new Pokemon("mewtwo", "Red sample description", "rare", true)
 

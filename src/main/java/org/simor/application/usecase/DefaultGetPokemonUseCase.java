@@ -1,7 +1,7 @@
 package org.simor.application.usecase;
 
 import lombok.RequiredArgsConstructor;
-import org.simor.adapter.client.PokemonRestClient;
+import org.simor.adapter.client.PokemonClient;
 import org.simor.entity.domain.Pokemon;
 import org.springframework.stereotype.Component;
 
@@ -10,10 +10,10 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class DefaultGetPokemonUseCase implements GetPokemonInfoUseCase {
 
-    private final PokemonRestClient pokemonRestClient;
+    private final PokemonClient pokemonRestClient;
 
     @Override
     public Pokemon execute(String pokemonName) {
-        return pokemonRestClient.getPokemonSpec(pokemonName);
+        return pokemonRestClient.getPokemonSpecies(pokemonName);
     }
 }
