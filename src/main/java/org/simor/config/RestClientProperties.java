@@ -20,6 +20,8 @@ public class RestClientProperties {
     public static class RestClient {
         private String baseUrl;
         private String path;
+        private Integer readTimeout = 200;
+        private Integer connectTimeout = 200;
     }
 }
 

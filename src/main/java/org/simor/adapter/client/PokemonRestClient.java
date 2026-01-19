@@ -23,8 +23,8 @@ public class PokemonRestClient {
     PokemonRestClient(RestClientProperties.RestClient pokemonConfig) {
         ClientHttpRequestFactorySettings requestFactorySettings = ClientHttpRequestFactorySettings.defaults()
                 //TODO Make them configurable
-                .withConnectTimeout(Duration.ofMillis(200))
-                .withReadTimeout(Duration.ofMillis(200));
+                .withConnectTimeout(Duration.ofMillis(pokemonConfig.getConnectTimeout()))
+                .withReadTimeout(Duration.ofMillis(pokemonConfig.getReadTimeout()));
         JdkClientHttpRequestFactory requestFactory = ClientHttpRequestFactoryBuilder.jdk().build(requestFactorySettings);
         pokemonRestClient = RestClient.builder()
                 .baseUrl(String.format("%s/api/v2/pokemon-species/", pokemonConfig.getBaseUrl()))

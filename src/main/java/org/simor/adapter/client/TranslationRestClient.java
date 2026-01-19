@@ -25,8 +25,8 @@ public class TranslationRestClient implements TranslationClient {
     public TranslationRestClient(RestClientProperties.RestClient translationConfig) {
         ClientHttpRequestFactorySettings requestFactorySettings = ClientHttpRequestFactorySettings.defaults()
                 //TODO Make them configurable
-                .withConnectTimeout(Duration.ofMillis(200))
-                .withReadTimeout(Duration.ofMillis(200));
+                .withConnectTimeout(Duration.ofMillis(translationConfig.getConnectTimeout()))
+                .withReadTimeout(Duration.ofMillis(translationConfig.getReadTimeout()));
         JdkClientHttpRequestFactory requestFactory = ClientHttpRequestFactoryBuilder.jdk().build(requestFactorySettings);
         translationRestClient = RestClient.builder()
                 .baseUrl(String.format("%s/%s", translationConfig.getBaseUrl(), translationConfig.getPath()))

@@ -17,8 +17,8 @@ class ConfigTest extends Specification {
 
     def "Given strategies they are inserted in correct order"() {
         given:
-        def yodaTranslation = new TranslationRestClient(Mock(RestClientProperties.RestClient))
-        def shakespeareTranslation = new TranslationRestClient(Mock(RestClientProperties.RestClient))
+        def yodaTranslation = new TranslationRestClient(new RestClientProperties.RestClient())
+        def shakespeareTranslation = new TranslationRestClient(new RestClientProperties.RestClient())
         when:
         def strategyMap = config.strategyTranslationClientMap(yodaTranslation, shakespeareTranslation)
         then:
