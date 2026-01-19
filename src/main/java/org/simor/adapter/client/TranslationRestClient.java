@@ -1,6 +1,7 @@
 package org.simor.adapter.client;
 
 import io.github.resilience4j.retry.annotation.Retry;
+import org.simor.config.RestClientProperties;
 import org.simor.entity.TranslatedContent;
 import org.simor.entity.TranslatedDescription;
 import org.springframework.boot.http.client.ClientHttpRequestFactoryBuilder;
@@ -21,14 +22,14 @@ public class TranslationRestClient implements TranslationClient {
 
     private final RestClient translationRestClient;
 
-    public TranslationRestClient(String baseUrl, String path) {
+    public TranslationRestClient(RestClientProperties.RestClient translationConfig) {
         ClientHttpRequestFactorySettings requestFactorySettings = ClientHttpRequestFactorySettings.defaults()
                 //TODO Make them configurable
                 .withConnectTimeout(Duration.ofMillis(200))
                 .withReadTimeout(Duration.ofMillis(200));
         JdkClientHttpRequestFactory requestFactory = ClientHttpRequestFactoryBuilder.jdk().build(requestFactorySettings);
         translationRestClient = RestClient.builder()
-                .baseUrl(String.format("%s/%s", baseUrl, path))
+                .baseUrl(String.format("%s/%s", translationConfig.getBaseUrl(), translationConfig.getPath()))
                 .requestFactory(requestFactory)
                 .build();
     }

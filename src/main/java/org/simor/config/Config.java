@@ -6,7 +6,6 @@ import org.simor.application.strategy.ShakespeareTranslationStrategy;
 import org.simor.application.strategy.TranslationStrategy;
 import org.simor.application.strategy.YodaTranslationStrategy;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -16,18 +15,31 @@ import java.util.Map;
 @Configuration
 public class Config {
 
+    @Bean
+    public RestClientProperties.RestClient pokemonConfig(RestClientProperties restClientProperties) {
+        return restClientProperties.getPokemon();
+    }
+
+    @Bean
+    public RestClientProperties.RestClient shakespeareTranslationConfig(RestClientProperties restClientProperties) {
+        return restClientProperties.getShakespeareTranslation();
+    }
+
     @Bean("shakespeareTranslation")
     public TranslationClient shakespeareTranslationRestClient(
-            @Value("${rest-client.shakespeare-translation.base-url}") String baseUrl,
-            @Value("${rest-client.shakespeare-translation.path}") String path) {
-        return new TranslationRestClient(baseUrl, path);
+            @Qualifier("shakespeareTranslationConfig") RestClientProperties.RestClient shakespeareConfig) {
+        return new TranslationRestClient(shakespeareConfig);
+    }
+
+    @Bean
+    public RestClientProperties.RestClient yodaTranslationConfig(RestClientProperties restClientProperties) {
+        return restClientProperties.getYodaTranslation();
     }
 
     @Bean("yodaTranslation")
     public TranslationClient yodaTranslationRestClient(
-            @Value("${rest-client.yoda-translation.base-url}") String baseUrl,
-            @Value("${rest-client.yoda-translation.path}") String path) {
-        return new TranslationRestClient(baseUrl, path);
+            @Qualifier("yodaTranslationConfig") RestClientProperties.RestClient yodaConfig) {
+        return new TranslationRestClient(yodaConfig);
     }
 
     // decouple strategy applicable from actual implementation

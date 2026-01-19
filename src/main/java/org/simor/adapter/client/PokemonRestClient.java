@@ -1,8 +1,8 @@
 package org.simor.adapter.client;
 
 import io.github.resilience4j.retry.annotation.Retry;
+import org.simor.config.RestClientProperties;
 import org.simor.entity.PokemonSpec;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.http.client.ClientHttpRequestFactoryBuilder;
 import org.springframework.boot.http.client.ClientHttpRequestFactorySettings;
 import org.springframework.http.HttpStatus;
@@ -20,14 +20,14 @@ public class PokemonRestClient {
 
     private final RestClient pokemonRestClient;
 
-    PokemonRestClient(@Value("${rest-client.pokemon.base-url}") String baseUrl) {
+    PokemonRestClient(RestClientProperties.RestClient pokemonConfig) {
         ClientHttpRequestFactorySettings requestFactorySettings = ClientHttpRequestFactorySettings.defaults()
                 //TODO Make them configurable
                 .withConnectTimeout(Duration.ofMillis(200))
                 .withReadTimeout(Duration.ofMillis(200));
         JdkClientHttpRequestFactory requestFactory = ClientHttpRequestFactoryBuilder.jdk().build(requestFactorySettings);
         pokemonRestClient = RestClient.builder()
-                .baseUrl(String.format("%s/api/v2/pokemon-species/", baseUrl))
+                .baseUrl(String.format("%s/api/v2/pokemon-species/", pokemonConfig.getBaseUrl()))
                 .requestFactory(requestFactory)
                 .build();
     }
@@ -43,8 +43,8 @@ public class PokemonRestClient {
         } catch (RestClientResponseException ex) {
             // exception thrown by ResponseSpec when status code >= 400
             throw new PokemonRestClientException(ex.getStatusCode(), ex.getMessage());
-        } catch (RestClientException ex){
-            throw new PokemonRestClientException(HttpStatus.BAD_GATEWAY,"Unexpected error occurred");
+        } catch (RestClientException ex) {
+            throw new PokemonRestClientException(HttpStatus.BAD_GATEWAY, "Unexpected error occurred");
         }
     }
 }
