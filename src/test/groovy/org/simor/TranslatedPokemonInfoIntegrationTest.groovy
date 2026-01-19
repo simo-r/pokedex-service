@@ -26,18 +26,18 @@ class TranslatedPokemonInfoIntegrationTest extends Specification {
 
     @Shared
     static WireMockContainer mockServer = new WireMockContainer("wiremock/wiremock")
-            .withMappingFromResource("pokemon_success_mewtwo.json")
-            .withMappingFromResource("pokemon_success_bulbasaur.json")
-            .withMappingFromResource("pokemon_success_pikachu.json")
-            .withMappingFromResource("pokemon_success_eevee.json")
-            .withMappingFromResource("pokemon_not_found.json")
-            .withMappingFromResource("pokemon_internal_server_error.json")
-            .withMappingFromResource("pokemon_bad_request.json")
-            .withMappingFromResource("pokemon_success_no_description.json")
-            .withMappingFromResource("translation_success_mewtwo.json")
-            .withMappingFromResource("translation_success_bulbasaur.json")
-            .withMappingFromResource("translation_bad_request_pikachu.json")
-            .withMappingFromResource("translation_internal_error_eevee.json")
+            .withMappingFromResource("stub/pokemon/pokemon_success_mewtwo.json")
+            .withMappingFromResource("stub/pokemon/pokemon_success_bulbasaur.json")
+            .withMappingFromResource("stub/pokemon/pokemon_success_pikachu.json")
+            .withMappingFromResource("stub/pokemon/pokemon_success_eevee.json")
+            .withMappingFromResource("stub/pokemon/pokemon_not_found.json")
+            .withMappingFromResource("stub/pokemon/pokemon_internal_server_error.json")
+            .withMappingFromResource("stub/pokemon/pokemon_bad_request.json")
+            .withMappingFromResource("stub/pokemon/pokemon_success_no_description.json")
+            .withMappingFromResource("stub/translation/translation_success_mewtwo.json")
+            .withMappingFromResource("stub/translation/translation_success_bulbasaur.json")
+            .withMappingFromResource("stub/translation/translation_bad_request_pikachu.json")
+            .withMappingFromResource("stub/translation/translation_internal_error_eevee.json")
 
     @Autowired
     MockMvc mockMvc

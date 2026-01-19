@@ -25,11 +25,11 @@ class PokemonInfoIntegrationTest extends Specification {
     private static final CB_NAME = 'cb-pokemon'
     @Shared
     static WireMockContainer mockServer = new WireMockContainer("wiremock/wiremock")
-            .withMappingFromResource("pokemon_success_mewtwo.json")
-            .withMappingFromResource("pokemon_not_found.json")
-            .withMappingFromResource("pokemon_internal_server_error.json")
-            .withMappingFromResource("pokemon_bad_request.json")
-            .withMappingFromResource("pokemon_success_no_description.json")
+            .withMappingFromResource("stub/pokemon/pokemon_success_mewtwo.json")
+            .withMappingFromResource("stub/pokemon/pokemon_not_found.json")
+            .withMappingFromResource("stub/pokemon/pokemon_internal_server_error.json")
+            .withMappingFromResource("stub/pokemon/pokemon_bad_request.json")
+            .withMappingFromResource("stub/pokemon/pokemon_success_no_description.json")
 
     @Autowired
     MockMvc mockMvc

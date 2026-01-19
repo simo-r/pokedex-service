@@ -23,14 +23,14 @@ class TranslationRestClientTest extends Specification {
 
     @Shared
     private static WireMockContainer MOCK_SERVER = new WireMockContainer("wiremock/wiremock")
-            .withMappingFromResource("translation_success.json")
-            .withMappingFromResource("translation_bad_request.json")
-            .withMappingFromResource("translation_no_success.json")
-            .withMappingFromResource("translation_internal_server_error.json")
-            .withMappingFromResource("translation_malformed_response.json")
-            .withMappingFromResource("translation_success_retry_timeout_scenario.json")
-            .withMappingFromResource("translation_success_retry_5xx_scenario.json")
-            .withMappingFromResource("translation_success_cache_scenario.json")
+            .withMappingFromResource("stub/translation/translation_success.json")
+            .withMappingFromResource("stub/translation/translation_bad_request.json")
+            .withMappingFromResource("stub/translation/translation_no_success.json")
+            .withMappingFromResource("stub/translation/translation_internal_server_error.json")
+            .withMappingFromResource("stub/translation/translation_malformed_response.json")
+            .withMappingFromResource("stub/translation/translation_success_retry_timeout_scenario.json")
+            .withMappingFromResource("stub/translation/translation_success_retry_5xx_scenario.json")
+            .withMappingFromResource("stub/translation/translation_success_cache_scenario.json")
 
     @Autowired
     @Qualifier("shakespeareTranslation")

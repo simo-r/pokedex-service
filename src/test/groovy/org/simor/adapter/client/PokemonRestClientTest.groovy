@@ -27,13 +27,13 @@ class PokemonRestClientTest extends Specification {
 
     @Shared
     private static WireMockContainer MOCK_SERVER = new WireMockContainer("wiremock/wiremock")
-            .withMappingFromResource("pokemon_success_mewtwo.json")
-            .withMappingFromResource("pokemon_not_found.json")
-            .withMappingFromResource("pokemon_internal_server_error.json")
-            .withMappingFromResource("pokemon_malformed_response.json")
-            .withMappingFromResource("pokemon_success_retry_timeout_scenario.json")
-            .withMappingFromResource("pokemon_success_retry_5xx_scenario.json")
-            .withMappingFromResource("pokemon_success_cache_scenario.json")
+            .withMappingFromResource("stub/pokemon/pokemon_success_mewtwo.json")
+            .withMappingFromResource("stub/pokemon/pokemon_not_found.json")
+            .withMappingFromResource("stub/pokemon/pokemon_internal_server_error.json")
+            .withMappingFromResource("stub/pokemon/pokemon_malformed_response.json")
+            .withMappingFromResource("stub/pokemon/pokemon_success_retry_timeout_scenario.json")
+            .withMappingFromResource("stub/pokemon/pokemon_success_retry_5xx_scenario.json")
+            .withMappingFromResource("stub/pokemon/pokemon_success_cache_scenario.json")
     @Autowired
     private PokemonRestClient pokemonRestClient
 
