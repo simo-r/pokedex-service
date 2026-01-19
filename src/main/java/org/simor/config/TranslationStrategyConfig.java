@@ -16,35 +16,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Configuration
-@EnableCaching
-public class Config {
-
-    @Bean
-    public RestClientProperties.RestClient pokemonConfig(RestClientProperties restClientProperties) {
-        return restClientProperties.getPokemon();
-    }
-
-    @Bean
-    public RestClientProperties.RestClient shakespeareTranslationConfig(RestClientProperties restClientProperties) {
-        return restClientProperties.getShakespeareTranslation();
-    }
-
-    @Bean("shakespeareTranslation")
-    public TranslationClient shakespeareTranslationRestClient(
-            @Qualifier("shakespeareTranslationConfig") RestClientProperties.RestClient shakespeareConfig) {
-        return new TranslationRestClient(shakespeareConfig);
-    }
-
-    @Bean
-    public RestClientProperties.RestClient yodaTranslationConfig(RestClientProperties restClientProperties) {
-        return restClientProperties.getYodaTranslation();
-    }
-
-    @Bean("yodaTranslation")
-    public TranslationClient yodaTranslationRestClient(
-            @Qualifier("yodaTranslationConfig") RestClientProperties.RestClient yodaConfig) {
-        return new TranslationRestClient(yodaConfig);
-    }
+public class TranslationStrategyConfig {
 
     // decouple strategy applicable from actual implementation
     @Bean
@@ -56,10 +28,5 @@ public class Config {
         strategyTranslationClientMap.put(new YodaTranslationStrategy(), yodaTranslation);
         strategyTranslationClientMap.put(new ShakespeareTranslationStrategy(), shakespeareTranslation);
         return strategyTranslationClientMap;
-    }
-
-    @Bean
-    CacheManager cacheManager() {
-        return new ConcurrentMapCacheManager();
     }
 }

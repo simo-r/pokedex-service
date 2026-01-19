@@ -4,14 +4,14 @@ import org.simor.adapter.client.PokemonRestClient
 import org.simor.entity.domain.Pokemon
 import spock.lang.Specification
 
-class GetPokemonInfoServiceTest extends Specification {
+class DefaultGetPokemonUseCaseTest extends Specification {
 
     private PokemonRestClient repository
-    private GetPokemonInfoService pokemonInfoUseCase
+    private DefaultGetPokemonUseCase pokemonInfoUseCase
 
     def setup() {
         repository = Mock(PokemonRestClient)
-        pokemonInfoUseCase = new GetPokemonInfoService(repository)
+        pokemonInfoUseCase = new DefaultGetPokemonUseCase(repository)
     }
 
     def "Given valid pokemon spec it returns its basic information"() {

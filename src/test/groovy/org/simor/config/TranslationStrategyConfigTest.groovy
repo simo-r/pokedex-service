@@ -7,12 +7,12 @@ import org.simor.application.strategy.TranslationStrategy
 import org.simor.application.strategy.YodaTranslationStrategy
 import spock.lang.Specification
 
-class ConfigTest extends Specification {
+class TranslationStrategyConfigTest extends Specification {
 
-    private Config config
+    private TranslationStrategyConfig config
 
     def setup() {
-        config = new Config()
+        config = new TranslationStrategyConfig()
     }
 
     def "Given strategies they are inserted in correct order"() {

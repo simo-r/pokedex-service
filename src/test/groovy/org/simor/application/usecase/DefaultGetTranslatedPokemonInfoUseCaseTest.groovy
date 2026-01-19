@@ -4,12 +4,11 @@ import org.simor.adapter.client.TranslationClient
 import org.simor.adapter.client.TranslationRestClientException
 import org.simor.application.strategy.TranslationStrategy
 import org.simor.entity.domain.Pokemon
-import org.simor.entity.model.GetPokemonInfoResponse
 import org.springframework.http.HttpStatus
 import spock.lang.Specification
 import spock.lang.Unroll
 
-class GetTranslatedPokemonInfoServiceTest extends Specification {
+class DefaultGetTranslatedPokemonInfoUseCaseTest extends Specification {
 
     private GetPokemonInfoUseCase getPokemonInfoUseCase
     private Map<TranslationStrategy, TranslationClient> strategyTranslationClientMap;
@@ -18,7 +17,7 @@ class GetTranslatedPokemonInfoServiceTest extends Specification {
     def setup() {
         getPokemonInfoUseCase = Mock(GetPokemonInfoUseCase)
         strategyTranslationClientMap = Mock(Map)
-        getTranslatedPokemonInfo = new GetTranslatedPokemonInfoService(getPokemonInfoUseCase, strategyTranslationClientMap)
+        getTranslatedPokemonInfo = new DefaultGetTranslatedPokemonInfoUseCase(getPokemonInfoUseCase, strategyTranslationClientMap)
     }
 
     def "Given pokemon name it returns translated pokemon info"() {

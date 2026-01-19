@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class GetPokemonInfoService implements GetPokemonInfoUseCase {
+public class DefaultGetPokemonUseCase implements GetPokemonInfoUseCase {
 
     private final PokemonRestClient pokemonRestClient;
 
@@ -16,5 +16,4 @@ public class GetPokemonInfoService implements GetPokemonInfoUseCase {
     public Pokemon execute(String pokemonName) {
         return pokemonRestClient.getPokemonSpec(pokemonName);
     }
-
 }

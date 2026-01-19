@@ -12,7 +12,7 @@ import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
-public class GetTranslatedPokemonInfoService implements GetTranslatedPokemonInfoUseCase {
+public class DefaultGetTranslatedPokemonInfoUseCase implements GetTranslatedPokemonInfoUseCase {
 
     private final GetPokemonInfoUseCase getPokemonInfoUseCase;
     private final Map<TranslationStrategy, TranslationClient> strategyTranslationClientMap;
